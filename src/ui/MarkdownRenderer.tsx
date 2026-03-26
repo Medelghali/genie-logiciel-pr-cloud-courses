@@ -1,9 +1,10 @@
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export function MarkdownRenderer({ markdown, className }: { markdown: string; className?: string }) {
   return (
     <div className={className ? `markdown-body ${className}` : 'markdown-body'}>
-      <ReactMarkdown>{markdown}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
     </div>
   )
 }
