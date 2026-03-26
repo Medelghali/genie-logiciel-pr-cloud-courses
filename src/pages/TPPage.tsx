@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { coursesByReference, markdownByReference, tps } from '../content/contentStore'
 import { MarkdownRenderer } from '../ui/MarkdownRenderer'
+import { GiscusComments } from '../ui/GiscusComments'
 
 export function TPPage() {
   const { reference } = useParams()
@@ -112,30 +113,10 @@ export function TPPage() {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
           <article className="xl:col-span-8 max-w-[70ch]">
             <MarkdownRenderer markdown={statement.content} />
+            <GiscusComments />
           </article>
 
           <aside className="xl:col-span-4 space-y-8">
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
-              <h4 className="font-bold text-primary text-lg mb-4">Submission Details</h4>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
-                  <span className="text-secondary">Due Date</span>
-                  <span className="font-semibold text-primary">TBD</span>
-                </div>
-                <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
-                  <span className="text-secondary">Weight</span>
-                  <span className="font-semibold text-primary">—</span>
-                </div>
-                <div className="flex justify-between items-center text-sm border-b border-slate-50 pb-2">
-                  <span className="text-secondary">Format</span>
-                  <span className="font-semibold text-primary">Markdown / PDF</span>
-                </div>
-              </div>
-              <button className="w-full mt-6 py-3 bg-primary text-on-primary rounded-lg font-bold text-sm tracking-wide uppercase hover:brightness-110 transition-all">
-                Submit Assignment
-              </button>
-            </div>
-
             <div className="bg-surface-container-low p-8 rounded-xl">
               <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-4">Further Reading</h4>
               <ul className="space-y-4">

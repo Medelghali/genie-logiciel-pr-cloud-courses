@@ -5,6 +5,8 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { Footer } from './layout/Footer'
 import { TopNavBar } from './layout/TopNavBar'
 import { TPPage } from './pages/TPPage'
+import { TPsListPage } from './pages/TPsListPage'
+import { ExamsListPage } from './pages/ExamsListPage'
 
 export function App() {
   return (
@@ -16,6 +18,8 @@ export function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/course/:reference" element={<CoursePage />} />
             <Route path="/tp/:reference" element={<TPPage />} />
+            <Route path="/tps" element={<TPsListPage />} />
+            <Route path="/exams" element={<ExamsListPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

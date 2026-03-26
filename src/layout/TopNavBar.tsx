@@ -1,6 +1,18 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 export function TopNavBar() {
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains('dark'))
+  }, [])
+
+  const toggleTheme = () => {
+    setIsDark(!isDark)
+    document.documentElement.classList.toggle('dark')
+  }
+
   return (
     <header className="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none docked full-width top-0 sticky z-50 transition-all duration-300 ease-in-out">
       <div className="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
@@ -15,12 +27,18 @@ export function TopNavBar() {
             >
               Course Catalog
             </Link>
-            <a className="text-blue-700 dark:text-blue-300 border-b-2 border-blue-900 dark:border-blue-300 pb-1" href="#">
+            <Link 
+              className="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" 
+              to="/tps"
+            >
               TPs
-            </a>
-            <a className="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">
+            </Link>
+            <Link 
+              className="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" 
+              to="/exams"
+            >
               Exams
-            </a>
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -34,8 +52,11 @@ export function TopNavBar() {
               type="text"
             />
           </div>
-          <button className="material-symbols-outlined text-blue-900 dark:text-blue-200 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-md transition-all">
-            account_circle
+          <button 
+            onClick={toggleTheme}
+            title="Toggle theme"
+            className="material-symbols-outlined text-blue-900 dark:text-blue-200 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-md transition-all">
+            {isDark ? 'light_mode' : 'dark_mode'}
           </button>
         </div>
       </div>
