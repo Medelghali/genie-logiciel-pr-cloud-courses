@@ -23,17 +23,17 @@ export function GiscusComments() {
     <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
       <Giscus
         id="comments"
-        repo="placeholder/repo"
-        repoId="placeholder_id"
-        category="Announcements"
-        categoryId="placeholder_category_id"
+        repo="Medelghali/genie-logiciel-pr-cloud-courses"
+        repoId="R_kgDORxcjtQ"
+        category="Q&A"
+        categoryId="DIC_kwDORxcjtc4C5ZwS"
         mapping="pathname"
         term="Comments"
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
         theme={theme}
-        lang="en"
+        lang="fr"
         loading="lazy"
       />
     </div>
