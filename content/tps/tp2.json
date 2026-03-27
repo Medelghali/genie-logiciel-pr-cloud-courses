@@ -1,0 +1,7 @@
+{
+    "type": "TP",
+    "reference": "python-tp2",
+    "courseRef": "python",
+    "title": "TP 2 - Résolution numérique d’équation différentielle (avec correction)",
+    "statementMarkdownRef": "tp2-python"
+}

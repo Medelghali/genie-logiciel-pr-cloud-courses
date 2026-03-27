@@ -1,8 +1,7 @@
 {
-  "type": "TP",
-  "reference": "prog-logique-tp1",
-  "courseRef": "prog-logique",
-  "title": "TP 1 - Premiers pas",
-  "statementMarkdownRef": "tp1-statement"
+    "type": "TP",
+    "reference": "python-tp1",
+    "courseRef": "python",
+    "title": "TP 1 - Équations différentielles (avec correction)",
+    "statementMarkdownRef": "tp1-python"
 }
-

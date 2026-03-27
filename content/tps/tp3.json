@@ -1,0 +1,7 @@
+{
+    "type": "TP",
+    "reference": "python-tp3",
+    "courseRef": "python",
+    "title": "TP 3 - resolution numerique des ED (avec correction)",
+    "statementMarkdownRef": "tp3-python"
+}
