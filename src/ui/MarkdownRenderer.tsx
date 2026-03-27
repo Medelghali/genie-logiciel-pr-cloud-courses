@@ -1,10 +1,14 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
+import 'katex/dist/katex.min.css';
 
 export function MarkdownRenderer({ markdown, className }: { markdown: string; className?: string }) {
   return (
     <div className={className ? `markdown-body ${className}` : 'markdown-body'}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>{markdown}</ReactMarkdown>
     </div>
   )
 }
