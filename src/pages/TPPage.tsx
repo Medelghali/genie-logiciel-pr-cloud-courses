@@ -11,7 +11,7 @@ export function TPPage() {
 
   if (!tp || !course || !statement) {
     return (
-      <main className="max-w-screen-2xl mx-auto px-8 py-12">
+      <main className="max-w-screen-2xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
         <h1 className="font-headline text-4xl text-primary mb-4">TP introuvable</h1>
         <p className="text-secondary">
           <Link className="text-primary underline underline-offset-4" to={`/course/${tp?.courseRef ?? ''}`}>
@@ -68,8 +68,8 @@ export function TPPage() {
         </div>
       </aside>
 
-      <section className="flex-1 px-6 md:px-12 py-8 bg-surface">
-        <nav className="flex items-center gap-2 mb-10 text-xs font-medium uppercase tracking-widest text-secondary/70">
+      <section className="flex-1 px-4 sm:px-6 md:px-12 py-6 sm:py-8 bg-surface">
+        <nav className="flex flex-wrap items-center gap-2 mb-6 sm:mb-10 text-xs font-medium uppercase tracking-widest text-secondary/70">
           <Link className="hover:text-primary transition-colors" to={`/course/${course.reference}`}>
             {course.title}
           </Link>
@@ -79,9 +79,9 @@ export function TPPage() {
           <span className="text-primary font-bold">{tp.title}</span>
         </nav>
 
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex flex-wrap items-center gap-3 mb-3 sm:mb-4">
               <span className="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase">
                 Practical Assignment
               </span>
@@ -89,12 +89,12 @@ export function TPPage() {
                 REF: {tp.reference.toUpperCase()}
               </span>
             </div>
-            <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary tracking-tight leading-tight max-w-3xl">
+            <h1 className="font-headline text-2xl sm:text-4xl md:text-5xl font-bold text-primary tracking-tight leading-tight max-w-3xl">
               {tp.title}
             </h1>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-3 sm:gap-4">
             <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container-high text-primary rounded-lg text-sm font-medium transition-all">
               <span className="material-symbols-outlined text-lg" data-icon="download">
                 download
@@ -110,7 +110,7 @@ export function TPPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 sm:gap-12">
           <article className="xl:col-span-8 max-w-[70ch]">
             <MarkdownRenderer markdown={statement.content} />
             <GiscusComments />

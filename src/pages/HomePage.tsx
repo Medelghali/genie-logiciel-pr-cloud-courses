@@ -5,18 +5,18 @@ export function HomePage() {
   const courses = Array.from(coursesByReference.values()).sort((a, b) => a.title.localeCompare(b.title, 'fr'))
 
   return (
-    <main className="max-w-screen-2xl mx-auto px-8 py-12">
+    <main className="max-w-screen-2xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
       <section className="mb-16 grid grid-cols-12 gap-8 items-end">
         <div className="col-span-12 md:col-span-8">
-          <h1 className="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight tracking-tight">
+          <h1 className="font-headline text-3xl sm:text-5xl md:text-6xl text-primary mb-4 leading-tight tracking-tight">
             Software Engineering for <br />
             <span className="italic text-surface-tint">Cloud computing</span>
           </h1>
-          <p className="font-body text-lg text-secondary max-w-2xl">
+          <p className="font-body text-base sm:text-lg text-secondary max-w-2xl">
             Build, deploy, and scale applications using cutting-edge cloud technologies, modern architectures, and industry best practices.
           </p>
         </div>
-        <div className="col-span-12 md:col-span-4 flex justify-end gap-3 pb-2">
+        <div className="col-span-12 md:col-span-4 flex flex-wrap justify-start md:justify-end gap-3 pb-2">
           <div className="flex items-center gap-2 bg-secondary-container px-4 py-2 rounded-full text-on-secondary-container text-xs font-semibold tracking-wider uppercase">
             <span className="material-symbols-outlined text-sm">filter_list</span>
             <span>Filter Catalog</span>
@@ -48,7 +48,7 @@ export function HomePage() {
                     <h2 className="font-headline text-3xl text-white">{course.title}</h2>
                   </div>
                 </div>
-                <div className="p-8 grid grid-cols-2 gap-6">
+                <div className="p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Author</p>
                     <p className="font-headline text-lg text-primary">Editorial Team</p>
@@ -59,7 +59,7 @@ export function HomePage() {
                     </p>
                     <p className="font-headline text-lg text-primary">TBD</p>
                   </div>
-                  <div className="col-span-2 pt-4 border-t border-slate-100 flex justify-between items-center">
+                  <div className="sm:col-span-2 pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <span className="text-xs text-secondary font-medium italic">Ref: {course.reference}</span>
                     <Link
                       to={`/course/${course.reference}`}
@@ -109,12 +109,12 @@ export function HomePage() {
         })}
       </div>
 
-      <div className="mt-24 max-w-4xl border-l-2 border-surface-tint bg-surface-container-low p-10 rounded-r-lg">
+      <div className="mt-12 sm:mt-24 max-w-4xl border-l-2 border-surface-tint bg-surface-container-low p-6 sm:p-10 rounded-r-lg">
         <h4 className="font-headline text-2xl text-primary mb-4 italic">The Scholarly Mandate</h4>
         <p className="font-body text-secondary leading-relaxed mb-6">
           "Education is not the learning of facts, but the training of the mind to think."
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <button className="text-[10px] font-bold uppercase tracking-widest text-primary border-b border-primary pb-1">
             Read Mission Statement
           </button>

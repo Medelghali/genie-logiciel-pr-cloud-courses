@@ -3,9 +3,9 @@ import { coursesByReference, tps } from '../content/contentStore'
 
 export function TPsListPage() {
   return (
-    <main className="max-w-screen-2xl mx-auto px-8 py-12 min-h-screen">
+    <main className="max-w-screen-2xl mx-auto px-4 sm:px-8 py-8 sm:py-12 min-h-screen">
       <section className="mb-16">
-        <h1 className="font-headline text-5xl md:text-6xl text-primary mb-4 leading-tight tracking-tight">
+        <h1 className="font-headline text-3xl sm:text-5xl md:text-6xl text-primary mb-4 leading-tight tracking-tight">
           Practical Assignments
         </h1>
         <p className="font-body text-lg text-secondary max-w-2xl">

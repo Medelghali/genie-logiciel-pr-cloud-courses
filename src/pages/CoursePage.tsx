@@ -26,8 +26,8 @@ export function CoursePage() {
     .sort((a, b) => a.title.localeCompare(b.title, 'fr'))
 
   return (
-    <main className="max-w-screen-2xl mx-auto px-8 py-6">
-      <nav className="flex items-center gap-2 mb-8 text-xs uppercase tracking-widest text-secondary">
+    <main className="max-w-screen-2xl mx-auto px-4 sm:px-8 py-4 sm:py-6">
+      <nav className="flex flex-wrap items-center gap-2 mb-6 sm:mb-8 text-xs uppercase tracking-widest text-secondary">
         <Link className="hover:text-primary" to="/">
           Catalog
         </Link>
@@ -35,7 +35,7 @@ export function CoursePage() {
         <span className="text-on-surface font-semibold">{course.reference}</span>
       </nav>
 
-      <div className="flex gap-12">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         <aside className="hidden lg:flex flex-col gap-y-2 p-6 bg-slate-50 dark:bg-slate-950 h-screen w-64 sticky top-24 border-r-0 font-sans text-sm font-medium text-blue-900 dark:text-blue-300">
           <div className="mb-6">
             <h3 className="text-lg font-headline font-bold text-on-background">Course Navigator</h3>
@@ -81,19 +81,19 @@ export function CoursePage() {
 
         <div className="flex-1 max-w-4xl">
           <section className="mb-12">
-            <div className="relative rounded-xl overflow-hidden mb-8 h-64 bg-primary-container">
+            <div className="relative rounded-xl overflow-hidden mb-8 h-48 sm:h-64 bg-primary-container">
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
-              <div className="absolute inset-0 p-10 flex flex-col justify-end">
+              <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-end">
                 <span className="inline-block px-3 py-1 bg-secondary-container text-on-secondary-fixed text-[10px] font-bold tracking-widest rounded-full mb-4 w-fit">
                   {course.reference} • Module
                 </span>
-                <h1 className="text-4xl md:text-5xl font-headline font-bold text-white tracking-tight leading-tight">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-headline font-bold text-white tracking-tight leading-tight">
                   {course.title}
                 </h1>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-surface-container-lowest rounded-xl shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 p-4 sm:p-6 bg-surface-container-lowest rounded-xl shadow-sm">
               <div>
                 <p className="text-[10px] uppercase tracking-widest text-secondary mb-1">Lead Professor</p>
                 <p className="text-sm font-bold text-primary">Editorial Team</p>
@@ -133,7 +133,7 @@ export function CoursePage() {
           </section>
 
           <section className="mb-16" id="related-tps">
-            <div className="flex items-baseline justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-2 mb-8">
               <h2 className="text-2xl font-headline font-bold text-primary">Assigned Practical Works (TPs)</h2>
               <span className="text-xs uppercase tracking-widest text-secondary">Ordered by Sequence</span>
             </div>
