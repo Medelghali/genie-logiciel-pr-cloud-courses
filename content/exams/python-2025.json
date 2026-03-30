@@ -1,0 +1,9 @@
+{
+  "type": "Exam",
+  "reference": "python-2025",
+  "courseRef": "python",
+  "title": "Final Exam: Python Fundamentals",
+  "year": 2025,
+  "statementMarkdownRef": "exam-python-2025"
+}
+

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { exams } from '../content/contentStore'
 
 export function ExamsListPage() {
@@ -15,9 +16,12 @@ export function ExamsListPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {exams.length > 0 ? (
           exams.map((exam: any, idx) => (
-             <div key={idx} className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-slate-100 dark:border-slate-800">
-               <h3 className="font-headline text-xl text-primary">{exam?.title || 'Exam'}</h3>
-             </div>
+             <Link key={idx} to={`/exam/${exam.reference}`} className="block group">
+               <div className="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-slate-100 dark:border-slate-800 transition-colors group-hover:bg-surface-variant group-hover:border-primary">
+                 <h3 className="font-headline text-xl text-primary group-hover:text-blue-700">{exam?.title || 'Exam'}</h3>
+                 {exam.year && <p className="text-secondary mt-2 text-sm">{exam.year}</p>}
+               </div>
+             </Link>
           ))
         ) : (
           <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center py-20 bg-surface-container-lowest rounded-lg border border-dashed border-outline-variant">

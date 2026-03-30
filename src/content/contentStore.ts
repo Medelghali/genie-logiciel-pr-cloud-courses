@@ -1,4 +1,4 @@
-import type { Course, MarkdownDocument, TP } from '../models/content'
+import type { Course, Exam, MarkdownDocument, TP } from '../models/content'
 import { parseJsonFrontmatterMarkdown } from './parseJsonFrontmatterMarkdown'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -17,6 +17,10 @@ const coursesRaw = import.meta.glob('../../content/courses/*.json', { eager: tru
   { default: unknown }
 >
 const tpsRaw = import.meta.glob('../../content/tps/*.json', { eager: true }) as Record<string, { default: unknown }>
+const examsRaw = import.meta.glob('../../content/exams/*.json', { eager: true }) as Record<
+  string,
+  { default: unknown }
+>
 const markdownRawModules = import.meta.glob('../../content/markdown/*.md', {
   eager: true,
   query: '?raw',
@@ -51,6 +55,20 @@ const tpsList: TP[] = Object.values(tpsRaw)
     )
   })
 
+const examsList: Exam[] = Object.values(examsRaw)
+  .map((m) => m.default)
+  .filter((v): v is Exam => {
+    if (!isRecord(v)) return false
+    return (
+      v.type === 'Exam' &&
+      typeof v.reference === 'string' &&
+      typeof v.courseRef === 'string' &&
+      typeof v.title === 'string' &&
+      typeof v.year === 'number' &&
+      (v.statementMarkdownRef === undefined || typeof v.statementMarkdownRef === 'string')
+    )
+  })
+
 const markdownDocuments: MarkdownDocument[] = Object.entries(markdownRaw).map(([path, raw]) => {
   const parsed = parseJsonFrontmatterMarkdown(raw)
   const meta = parsed.meta
@@ -73,6 +91,8 @@ const markdownDocuments: MarkdownDocument[] = Object.entries(markdownRaw).map(([
 
 export const coursesByReference = new Map(coursesList.map((c) => [c.reference, c]))
 export const tps = [...tpsList].sort((a, b) => a.title.localeCompare(b.title, 'fr'))
+export const exams = [...examsList].sort((a, b) => b.year - a.year || a.title.localeCompare(b.title, 'fr'))
+export const examsByReference = new Map(examsList.map((e) => [e.reference, e]))
 export const markdownByReference = new Map(markdownDocuments.map((d) => [d.reference, d]))
 
 export const markdownDocumentsSorted = [...markdownDocuments].sort((a, b) =>
@@ -80,5 +100,15 @@ export const markdownDocumentsSorted = [...markdownDocuments].sort((a, b) =>
 )
 
 export const courses = [...coursesList].sort((a, b) => a.title.localeCompare(b.title, 'fr'))
-export const exams = [] as unknown[]
+export const examsByCourseRef = new Map<string, Exam[]>(
+  Object.entries(
+    examsList.reduce<Record<string, Exam[]>>((acc, exam) => {
+      ;(acc[exam.courseRef] ??= []).push(exam)
+      return acc
+    }, {}),
+  ).map(([courseRef, list]) => [
+    courseRef,
+    list.sort((a, b) => b.year - a.year || a.title.localeCompare(b.title, 'fr')),
+  ]),
+)
 

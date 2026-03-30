@@ -109,20 +109,7 @@ export function HomePage() {
         })}
       </div>
 
-      <div className="mt-12 sm:mt-24 max-w-4xl border-l-2 border-surface-tint bg-surface-container-low p-6 sm:p-10 rounded-r-lg">
-        <h4 className="font-headline text-2xl text-primary mb-4 italic">The Scholarly Mandate</h4>
-        <p className="font-body text-secondary leading-relaxed mb-6">
-          "Education is not the learning of facts, but the training of the mind to think."
-        </p>
-        <div className="flex flex-wrap gap-4">
-          <button className="text-[10px] font-bold uppercase tracking-widest text-primary border-b border-primary pb-1">
-            Read Mission Statement
-          </button>
-          <button className="text-[10px] font-bold uppercase tracking-widest text-secondary hover:text-primary transition-colors">
-            Contact Archivist
-          </button>
-        </div>
-      </div>
+     
     </main>
   )
 }

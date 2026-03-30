@@ -13,6 +13,15 @@ export type TP = {
   statementMarkdownRef?: string
 }
 
+export type Exam = {
+  type: 'Exam'
+  reference: string
+  courseRef: string
+  title: string
+  year: number
+  statementMarkdownRef?: string
+}
+
 export type MarkdownDocument = {
   type?: string
   reference: string

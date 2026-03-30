@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { coursesByReference, markdownByReference, tps } from '../content/contentStore'
+import { coursesByReference, markdownByReference, tps, examsByCourseRef } from '../content/contentStore'
 import { MarkdownRenderer } from '../ui/MarkdownRenderer'
 
 export function CoursePage() {
@@ -174,21 +174,40 @@ export function CoursePage() {
 
           <section className="mb-16" id="exams">
             <h2 className="text-2xl font-headline font-bold mb-8 text-primary">Examination Archive</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded-xl hover:shadow-md transition-all group">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="bg-primary-container text-on-primary-container px-3 py-1 rounded-md text-[10px] font-bold">— EDITION</div>
-                  <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">file_present</span>
+            {(() => {
+              const courseExams = examsByCourseRef.get(course.reference) ?? []
+              if (courseExams.length === 0) {
+                return <p className="text-secondary italic">No exams yet.</p>
+              }
+
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {courseExams.map((exam) => (
+                    <div
+                      key={exam.reference}
+                      className="p-6 bg-surface-container-lowest border border-outline-variant/10 rounded-xl hover:shadow-md transition-all group"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="bg-primary-container text-on-primary-container px-3 py-1 rounded-md text-[10px] font-bold">
+                          {exam.year} EDITION
+                        </div>
+                        <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">
+                          file_present
+                        </span>
+                      </div>
+                      <h3 className="font-headline font-bold text-lg text-primary mb-2">{exam.title}</h3>
+                      <p className="text-xs text-secondary leading-relaxed mb-6">REF: {exam.reference}</p>
+                      <button
+                        className="w-full py-2 bg-slate-100 text-primary text-[10px] font-bold uppercase tracking-widest rounded hover:bg-primary hover:text-white transition-colors"
+                        type="button"
+                      >
+                        View Resource
+                      </button>
+                    </div>
+                  ))}
                 </div>
-                <h3 className="font-headline font-bold text-lg text-primary mb-2">No exams yet</h3>
-                <p className="text-xs text-secondary leading-relaxed mb-6">
-                  Add `content/exams/*.json` later, then render them here.
-                </p>
-                <button className="w-full py-2 bg-slate-100 text-primary text-[10px] font-bold uppercase tracking-widest rounded hover:bg-primary hover:text-white transition-colors">
-                  View Resource
-                </button>
-              </div>
-            </div>
+              )
+            })()}
           </section>
         </div>
       </div>
