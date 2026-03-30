@@ -52,7 +52,7 @@ export function TPPage() {
           </Link>
         </nav>
 
-        <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+        {/*<div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
           <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-4 font-bold">In this Section</p>
           <ul className="space-y-4">
             <li className="border-l-2 border-primary pl-4">
@@ -65,7 +65,7 @@ export function TPPage() {
               <span className="block text-xs text-secondary">03. Requirements</span>
             </li>
           </ul>
-        </div>
+        </div>*/}
       </aside>
 
       <section className="flex-1 px-4 sm:px-6 md:px-12 py-6 sm:py-8 bg-surface">
@@ -117,7 +117,7 @@ export function TPPage() {
           </article>
 
           <aside className="xl:col-span-4 space-y-8">
-            <div className="bg-surface-container-low p-8 rounded-xl">
+            {/*<div className="bg-surface-container-low p-8 rounded-xl">
               <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-4">Further Reading</h4>
               <ul className="space-y-4">
                 <li>
@@ -137,7 +137,7 @@ export function TPPage() {
                   </a>
                 </li>
               </ul>
-            </div>
+            </div>*/}
           </aside>
         </div>
       </section>
