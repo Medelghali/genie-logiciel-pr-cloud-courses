@@ -3,5 +3,6 @@
     "reference": "tp-dba-etap-creation-db",
     "courseRef": "dba",
     "title": "TP DBA Etape Creation DB",
-    "statementMarkdownRef": "tp-dba-etape-creation-db"
+    "statementMarkdownRef": "tp-dba-etape-creation-db",
+    "author": "M-E"
 }

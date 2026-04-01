@@ -86,11 +86,7 @@ export function HomePage() {
                 <div className="space-y-4 mb-6">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Author</span>
-                    <span className="text-sm font-medium text-secondary">Editorial Board</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Professor</span>
-                    <span className="text-sm font-medium text-secondary">TBD</span>
+                    <span className="text-sm font-medium text-secondary">M-E</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-slate-100 flex justify-between items-center">

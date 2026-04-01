@@ -3,5 +3,6 @@
     "reference": "python-tp1",
     "courseRef": "python",
     "title": "TP 1 - Équations différentielles (avec correction)",
-    "statementMarkdownRef": "tp1-python"
+    "statementMarkdownRef": "tp1-python",
+    "author": "M-E"
 }

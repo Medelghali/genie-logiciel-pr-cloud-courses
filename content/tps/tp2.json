@@ -3,5 +3,6 @@
     "reference": "python-tp2",
     "courseRef": "python",
     "title": "TP 2 - Résolution numérique d’équation différentielle (avec correction)",
-    "statementMarkdownRef": "tp2-python"
+    "statementMarkdownRef": "tp2-python",
+    "author": "M-E"
 }

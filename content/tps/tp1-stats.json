@@ -3,5 +3,6 @@
     "reference": "tp1-stats",
     "courseRef": "statistics-optimization-for-ml",
     "title": "TP1 - Statistiques(avec correction imparfaite)",
-    "statementMarkdownRef": "tp1-stats-statement"
+    "statementMarkdownRef": "tp1-stats-statement",
+    "author": "M-E"
 }
