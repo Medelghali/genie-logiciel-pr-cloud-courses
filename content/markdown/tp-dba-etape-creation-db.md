@@ -194,10 +194,4 @@ oradim -delete -sid master
 - `drop database` – Deletes all datafiles, control files, and redo logs.
 - `oradim -delete -sid master` – Removes the Oracle service from Windows.
 
----
 
-## Notes
-
-- The steps assume you have administrative privileges on the machine and that the Oracle binaries are properly installed.
-- Adjust file paths (`c:\db\`) according to your environment.
-- Always back up important data before performing destructive operations like `drop database`.
