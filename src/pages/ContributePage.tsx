@@ -240,10 +240,14 @@ Welcome to the course!`}</code></pre>
             <li>Link TPs and Exams securely via the exact <code>courseRef</code> attribute.</li>
           </ul>
 
-          <div className="mt-16 pt-8 border-t border-[#e2e2e2] text-center">
+          <div className="mt-16 pt-8 border-t border-[#e2e2e2] text-left">
             <p className="docs-p text-sm text-gray-500 italic">
               — Document Author: <strong>theghost</strong> <br />
               <a href="https://github.com/ttheghost" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">https://github.com/ttheghost</a>
+            </p>
+            <p className="docs-p text-sm text-gray-500 italic">
+              — WebSite Owner: <strong>M-E</strong> <br />
+              <a href="https://github.com/Medelghali" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">https://github.com/Medelghali</a>
             </p>
           </div>
 
