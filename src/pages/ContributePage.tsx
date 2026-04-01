@@ -41,6 +41,7 @@ export function ContributePage() {
             <button onClick={() => scrollTo('adding-tp')} className="hover:bg-gray-200/60 text-left px-2 py-1.5 rounded-l-full border-l-4 border-transparent hover:border-gray-300 ml-2">2. Adding a Practical Assignment</button>
             <button onClick={() => scrollTo('adding-exam')} className="hover:bg-gray-200/60 text-left px-2 py-1.5 rounded-l-full border-l-4 border-transparent hover:border-gray-300 ml-2">3. Adding an Exam</button>
             <button onClick={() => scrollTo('adding-markdown')} className="hover:bg-gray-200/60 text-left px-2 py-1.5 rounded-l-full border-l-4 border-transparent hover:border-gray-300 ml-2">4. Adding Markdown Content</button>
+            <button onClick={() => scrollTo('github-pr')} className="hover:bg-gray-200/60 text-left px-2 py-1.5 rounded-l-full border-l-4 border-transparent hover:border-gray-300 ml-2">5. Submitting via GitHub PR</button>
             <button onClick={() => scrollTo('rules')} className="hover:bg-gray-200/60 text-left px-2 py-1.5 rounded-l-full border-l-4 border-transparent hover:border-gray-300 ml-2">Quick Rules for Success</button>
           </nav>
         </aside>
@@ -211,6 +212,25 @@ Welcome to the course!`}</code></pre>
             <li><strong>is_pdf</strong>: Boolean flag to treat as PDF (optional). Do not quote the value.</li>
           </ul>
 
+          <h2 id="github-pr" className="docs-h2">5. Submitting via GitHub PR</h2>
+          <p className="docs-p">
+            Once you have added your JSON and Markdown files locally, you can submit them to the official repository:
+          </p>
+          <ul className="docs-ul">
+            <li><strong>Fork</strong> the repository to your own GitHub account.</li>
+            <li>Create a new branch (e.g., <code>add-react-course</code>).</li>
+            <li>Commit your new JSON/Markdown files located in the <code>content/</code> directory.</li>
+            <li>Push the branch and open a <strong>Pull Request (PR)</strong> against the main branch.</li>
+          </ul>
+
+          <h3 className="docs-p font-bold text-[#d93025] mt-6">Common Reasons for PR Refusal</h3>
+          <ul className="docs-ul">
+            <li><strong>JSON Syntax Errors:</strong> Extra commas, missing quotes, or malformed braces will break the automated build.</li>
+            <li><strong>Modifying Source Code:</strong> Your PR must <em>only</em> contain files added or modified inside the <code>content/</code> directory. PRs touching files inside <code>src/</code> will be automatically rejected.</li>
+            <li><strong>Invalid Frontmatter:</strong> Omitting the three hyphens (<code>---</code>) to separate JSON frontmatter from Markdown, or having invalid JSON inside the frontmatter.</li>
+            <li><strong>Reference Collisions:</strong> Using a <code>reference</code> ID that has already been taken by another course, TP, or exam.</li>
+          </ul>
+
           <h2 id="rules" className="docs-h2">Quick Rules for Success</h2>
           <ul className="docs-ul">
             <li>You must <strong>restart the dev server</strong> after adding new metadata files, as Vite eager-loads them at build. Adding a new file without a restart will result in a 404 error temporarily.</li>
@@ -218,6 +238,13 @@ Welcome to the course!`}</code></pre>
             <li>Ensure your JSON files are valid. Missing quotes or trailing commas will break the build.</li>
             <li>Link TPs and Exams securely via the exact <code>courseRef</code> attribute.</li>
           </ul>
+
+          <div className="mt-16 pt-8 border-t border-[#e2e2e2] text-center">
+            <p className="docs-p text-sm text-gray-500 italic">
+              — Document Author: <strong>theghost</strong> <br />
+              <a href="https://github.com/ttheghost" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">https://github.com/ttheghost</a>
+            </p>
+          </div>
 
         </main>
       </div>
