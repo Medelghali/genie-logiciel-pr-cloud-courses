@@ -17,13 +17,13 @@ export function HomePage() {
           </p>
         </div>
         <div className="col-span-12 md:col-span-4 flex flex-wrap justify-start md:justify-end gap-3 pb-2">
-          <div className="flex items-center gap-2 bg-secondary-container px-4 py-2 rounded-full text-on-secondary-container text-xs font-semibold tracking-wider uppercase">
+        {/*  <div className="flex items-center gap-2 bg-secondary-container px-4 py-2 rounded-full text-on-secondary-container text-xs font-semibold tracking-wider uppercase">
             <span className="material-symbols-outlined text-sm">filter_list</span>
             <span>Filter Catalog</span>
           </div>
           <div className="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full text-secondary text-xs font-semibold tracking-wider uppercase border border-outline-variant/20">
             <span>Sort by: Latest</span>
-          </div>
+          </div>*/}
         </div>
       </section>
 

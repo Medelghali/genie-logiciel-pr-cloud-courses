@@ -13,18 +13,18 @@ export function Footer() {
           </p>
         </div>
         <nav className="flex flex-wrap justify-center md:justify-end gap-4 sm:gap-8 font-sans text-xs uppercase tracking-widest">
-          <Link
+          {/*<Link
             className="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors underline underline-offset-4"
             to="/"
           >
             University Press
-          </Link>
-          <a className="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors" href="#">
+          </Link>*/}
+          {/*<a className="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors" href="#">
             Digital Archive
-          </a>
-          <a className="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors" href="#">
+          </a>*/}
+          {/*<a className="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors" href="#">
             Scholarly Guidelines
-          </a>
+          </a>*/}
         </nav>
       </div>
     </footer>
