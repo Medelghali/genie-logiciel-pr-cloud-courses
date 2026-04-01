@@ -91,9 +91,9 @@ export function CoursePage() {
           </nav>
           <div className="mt-auto pt-8 border-t border-outline-variant/20">
             <div className="bg-surface-container-low p-4 rounded-lg">
-              <p className="text-[10px] uppercase tracking-tighter mb-2 opacity-60">Faculty Contact</p>
-              <p className="text-xs font-bold">Prof. Editorial Team</p>
-              <p className="text-[10px] font-normal text-secondary">contact@example.com</p>
+              <p className="text-[10px] uppercase tracking-tighter mb-2 opacity-60">dev Contact</p>
+              <p className="text-xs font-bold">M-E</p>
+              <p className="text-[10px] font-normal text-secondary">mohamed.el-ghali@uit.ac.ma</p>
             </div>
           </div>
         </aside>
