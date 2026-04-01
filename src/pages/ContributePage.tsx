@@ -214,13 +214,14 @@ Welcome to the course!`}</code></pre>
 
           <h2 id="github-pr" className="docs-h2">5. Submitting via GitHub PR</h2>
           <p className="docs-p">
-            Once you have added your JSON and Markdown files locally, you can submit them to the official repository:
+            To submit your new content to the official repository, follow these chronological steps:
           </p>
           <ul className="docs-ul">
-            <li><strong>Fork</strong> the repository to your own GitHub account.</li>
-            <li>Create a new branch (e.g., <code>add-react-course</code>).</li>
-            <li>Commit your new JSON/Markdown files located in the <code>content/</code> directory.</li>
-            <li>Push the branch and open a <strong>Pull Request (PR)</strong> against the main branch.</li>
+            <li><strong>Fork & Clone</strong>: Fork the repository to your own GitHub account and clone it to your local machine.</li>
+            <li><strong>Branch</strong>: Create a new branch for your content (e.g., <code>git checkout -b add-react-course</code>).</li>
+            <li><strong>Create Files</strong>: Add your new JSON and Markdown files strictly inside the <code>content/</code> directory as explained in the steps above.</li>
+            <li><strong>Commit & Push</strong>: Commit your changes and push the branch up to your fork.</li>
+            <li><strong>Pull Request</strong>: Open a <strong>Pull Request (PR)</strong> against the main branch of the official repository.</li>
           </ul>
 
           <h3 className="docs-p font-bold text-[#d93025] mt-6">Common Reasons for PR Refusal</h3>
