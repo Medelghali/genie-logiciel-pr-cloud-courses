@@ -136,8 +136,7 @@ export function CoursePage() {
             {renderContent(introDoc)}
 
             <div className="mt-8 border-l-2 border-surface-tint bg-surface-container-low p-6 rounded-r-lg italic serif-text text-on-surface-variant">
-              "The beauty of higher-order calculus lies not in the numbers, but in the elegant structure of the
-              space they define." — <span className="font-bold not-italic">Archive Foreword</span>
+              "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." — <span className="font-bold not-italic">Martin Fowler</span>
             </div>
           </section>
 
