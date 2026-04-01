@@ -8,6 +8,7 @@ import { TPPage } from './pages/TPPage'
 import { TPsListPage } from './pages/TPsListPage'
 import { ExamsListPage } from './pages/ExamsListPage'
 import { ExamPage } from './pages/ExamPage'
+import { ContributePage } from './pages/ContributePage'
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
             <Route path="/tps" element={<TPsListPage />} />
             <Route path="/exam/:reference" element={<ExamPage />} />
             <Route path="/exams" element={<ExamsListPage />} />
+            <Route path="/contribute" element={<ContributePage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
