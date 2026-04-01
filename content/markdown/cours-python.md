@@ -1191,3 +1191,7 @@ e) `produit` : renvoie le complexe produit du complexe lui-même et d'un autre c
 f) `difference` : renvoie le complexe différence du complexe lui-même et d'un autre complexe
 
 g) `distance` : renvoie la distance entre deux complexes `√((x₁ - x₂)² + (y₁ - y₂)²)`
+
+---
+
+<embed src="/media/pdf/Python.pdf" type="application/pdf" width="100%" height="600px" />

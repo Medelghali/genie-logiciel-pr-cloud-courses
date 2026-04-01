@@ -940,3 +940,8 @@ on ne rejette pas \(H_0\).
 3. Calculer la statistique de test
 4. Déterminer la région critique
 5. Prendre une décision
+
+---
+
+<embed src="/media/pdf/statistique-optimisation.pdf" type="application/pdf" width="100%" height="600px" />
+
