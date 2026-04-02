@@ -2,6 +2,5 @@
     "type": "Course",
     "reference": "python",
     "title": "Python Programming",
-    "introMarkdownRef": "python-intro",
-    "is_pdf": true
+    "introMarkdownRef": "python-intro"
 }

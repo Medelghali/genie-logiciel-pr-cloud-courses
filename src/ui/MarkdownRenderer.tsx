@@ -1,13 +1,41 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import mermaid from 'mermaid'
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 import 'katex/dist/katex.min.css'
+
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'default',
+  themeVariables: {
+    fontSize: '16px'
+  },
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true
+  }
+})
+
+function MermaidChart({ code }: { code: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (ref.current) {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' })
+      mermaid.render(`mermaid-${Date.now()}`, code).then(({ svg }) => {
+        ref.current!.innerHTML = svg
+      })
+    }
+  }, [code])
+
+  return <div ref={ref} />
+}
 
 function useIsDarkMode() {
   const [isDark, setIsDark] = useState(
@@ -88,6 +116,9 @@ export function MarkdownRenderer({ markdown, className }: { markdown: string; cl
               const codeString = String(children).replace(/\n$/, '')
 
               if (match) {
+                if (match[1] === 'mermaid') {
+                  return <div style={{ width: '100%', overflowX: 'auto' }}><MermaidChart code={codeString} /></div>
+                }
                 return (
                   <div style={{ position: 'relative' }}>
                     <CopyButton text={codeString} />
