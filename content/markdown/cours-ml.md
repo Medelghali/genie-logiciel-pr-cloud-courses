@@ -309,3 +309,177 @@ print(theta_best)
 ### Conclusion
 
 En maîtrisant la fonction d'hypothèse, la fonction de coût, le calcul derrière la descente de gradient et l'algèbre matricielle derrière la vectorisation, vous avez posé des fondations massives. Que vous traitiez d'une seule caractéristique pour prédire le prix des maisons, ou d'une matrice avec des milliers de caractéristiques polynomiales mappées à un phénomène complexe du monde réel, les mécanismes sous-jacents restent identiques : **définir le coût de l'erreur, et descendre mathématiquement la pente jusqu'à trouver la vérité.**
+
+## Implémentations en Python
+
+
+### 1. Régression Linéaire Univariée (Descente de Gradient)
+
+
+C'est le modèle de base prédisant une seule caractéristique $x$ pour une cible $y$ en utilisant la formule $y = ax + b$.
+
+```python
+import numpy as np
+
+def regression_lineaire_univariee(X, y, alpha=0.01, iterations=1000):
+    """
+    Entraîne un modèle de régression linéaire univariée en utilisant la descente de gradient.
+    
+    Paramètres :
+    X (numpy.array) : Tableau 1D des valeurs de la caractéristique (feature).
+    y (numpy.array) : Tableau 1D des valeurs cibles (target).
+    alpha (float) : Taux d'apprentissage (learning rate).
+    iterations (int) : Nombre d'époques.
+    
+    Retourne :
+    a (float) : La pente optimisée.
+    b (float) : L'ordonnée à l'origine optimisée (biais).
+    """
+    # Initialiser les paramètres à zéro
+    a = 0.0
+    b = 0.0
+    m = len(y) # Nombre d'exemples d'entraînement
+    
+    for i in range(iterations):
+        # 1. Calculer les prédictions (Hypothèse : y = ax + b)
+        y_pred = a * X + b
+        
+        # 2. Calculer l'erreur
+        erreur = y_pred - y
+        
+        # 3. Calculer les gradients
+        # La moyenne de (erreur * X) pour 'a', et la moyenne de (erreur) pour 'b'
+        da = (1/m) * np.sum(erreur * X)
+        db = (1/m) * np.sum(erreur)
+        
+        # 4. Mettre à jour les paramètres en descendant la pente
+        a -= alpha * da
+        b -= alpha * db
+        
+        # Optionnel : Afficher le coût (MSE) toutes les 100 itérations pour le voir diminuer
+        if i % 100 == 0:
+            cout = (1 / (2 * m)) * np.sum(erreur ** 2)
+            print(f"Itération {i} | Coût : {cout:.4f}")
+            
+    return a, b
+
+# --- Tester le Code ---
+# X = np.array([1, 2, 3, 4, 5])
+# y = np.array([3, 5, 7, 9, 11]) # La relation est environ y = 2x + 1
+# a, b = regression_lineaire_univariee(X, y, alpha=0.05, iterations=500)
+```
+
+---
+
+
+### 2. Régression Linéaire Multivariée (Descente de Gradient Vectorisée)
+
+
+Ce modèle gère plusieurs caractéristiques. Il s'appuie fortement sur la multiplication matricielle (`@` en Python) pour éviter les boucles `for` lentes. Il calcule $Y = XW$.
+
+```python
+import numpy as np
+
+def regression_lineaire_multivariee(X, y, alpha=0.01, iterations=1000):
+    """
+    Entraîne un modèle de régression linéaire multivariée.
+    
+    Paramètres :
+    X (numpy.ndarray) : Tableau 2D de forme (m, n) où m=échantillons, n=caractéristiques.
+    y (numpy.ndarray) : Tableau 2D de forme (m, 1) représentant les cibles.
+    alpha (float) : Taux d'apprentissage.
+    iterations (int) : Nombre d'époques.
+    
+    Retourne :
+    W (numpy.ndarray) : La matrice de poids optimisée de forme (n+1, 1).
+    """
+    m = X.shape[0] # Nombre d'échantillons (lignes)
+    
+    # 1. Ajouter la colonne de Biais (une colonne de 1) à la matrice X
+    # Cela nous permet de calculer l'ordonnée à l'origine (w0) dans les calculs matriciels
+    colonne_un = np.ones((m, 1))
+    X_b = np.hstack((colonne_un, X))
+    
+    # 2. Initialiser le vecteur de poids W avec des zéros (Forme : n+1 lignes, 1 colonne)
+    # n caractéristiques + 1 terme de biais
+    n_caracteristiques = X_b.shape[1]
+    W = np.zeros((n_caracteristiques, 1))
+    
+    for i in range(iterations):
+        # 3. Calculer les prédictions : Y_pred = X * W
+        y_pred = X_b @ W
+        
+        # 4. Calculer l'erreur
+        erreur = y_pred - y
+        
+        # 5. Calculer les gradients par vectorisation : X^T * Erreur / m
+        gradients = (1/m) * (X_b.T @ erreur)
+        
+        # 6. Mettre à jour les poids
+        W -= alpha * gradients
+        
+    return W
+
+# --- Tester le Code ---
+# X = np.array([[1, 2], [2, 4], [3, 6], [4, 8]]) # 2 Caractéristiques
+# y = np.array([[5], [10], [15], [20]])          # Cible
+# W = regression_lineaire_multivariee(X, y, alpha=0.01, iterations=1000)
+```
+
+---
+
+
+### 3. Régression Polynomiale (Équation Normale)
+
+
+Pour diversifier votre code et montrer à votre professeur que vous maîtrisez plusieurs approches mathématiques, voici la régression polynomiale résolue à l'aide de l'**Équation Normale** au lieu de la descente de gradient. Elle calcule les poids parfaits exacts en une seule étape mathématique en utilisant $W = (X^T X)^{-1} X^T Y$.
+
+```python
+import numpy as np
+
+def regression_polynomiale_equation_normale(X, y, degre=2):
+    """
+    Entraîne un modèle de régression polynomiale en utilisant l'équation normale analytique.
+    
+    Paramètres :
+    X (numpy.ndarray) : Tableau 1D ou 2D de la caractéristique de base.
+    y (numpy.ndarray) : Tableau 2D de la cible.
+    degre (int) : Le degré du polynôme (ex: 2 signifie ajouter X^2).
+    
+    Retourne :
+    W (numpy.ndarray) : Les poids optimaux.
+    """
+    # S'assurer que X est un vecteur colonne 2D
+    if X.ndim == 1:
+        X = X.reshape(-1, 1)
+        
+    m = X.shape[0]
+    
+    # 1. Feature Engineering : Créer des caractéristiques polynomiales (X, X^2, X^3...)
+    X_poly = X.copy()
+    for d in range(2, degre + 1):
+        nouvelle_caracteristique = X ** d
+        X_poly = np.hstack((X_poly, nouvelle_caracteristique))
+        
+    # 2. Ajouter la colonne de Biais (des 1)
+    colonne_un = np.ones((m, 1))
+    X_b = np.hstack((colonne_un, X_poly))
+    
+    # 3. Calculer les poids en utilisant l'Équation Normale : W = (X^T * X)^-1 * X^T * Y
+    # np.linalg.inv calcule l'inverse d'une matrice
+    X_transpose = X_b.T
+    
+    # Mathématiques matricielles étape par étape :
+    etape1 = X_transpose @ X_b              # (X^T * X)
+    etape2 = np.linalg.inv(etape1)          # (X^T * X)^-1
+    etape3 = etape2 @ X_transpose           # (X^T * X)^-1 * X^T
+    W = etape3 @ y                          # ((X^T * X)^-1 * X^T) * Y
+    
+    return W
+
+# --- Tester le Code ---
+# X = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
+# y = np.array([1, 4, 9, 16, 25]).reshape(-1, 1) # Non linéaire : y = x^2
+# W = regression_polynomiale_equation_normale(X, y, degre=2)
+# print("Poids (Biais, W1, W2) : \n", W)
+```
