@@ -15,25 +15,31 @@ Avant de plonger dans les mathématiques, nous devons catégoriser les différen
 ### 1.1 Apprentissage Supervisé (Supervised Learning)
 
 Dans l'**apprentissage supervisé**, l'algorithme est entraîné sur un jeu de données "étiqueté" (labeled). Cela signifie que chaque exemple dans les données d'entraînement est accompagné de la bonne réponse (l'étiquette). L'objectif est que le modèle apprenne la correspondance entre les entrées (caractéristiques ou *features*) et la sortie (étiquette) afin de pouvoir généraliser sur de nouvelles données.
+
 * **Classification :** La variable de sortie est une catégorie ou une valeur discrète.
-    * *Exemple :* Identifier si un email est "Spam" ou "Non Spam", ou diagnostiquer une tumeur comme "Maligne" ou "Bénigne".
+  * *Exemple :* Identifier si un email est "Spam" ou "Non Spam", ou diagnostiquer une tumeur comme "Maligne" ou "Bénigne".
+
 * **Régression :** La variable de sortie est une valeur numérique continue.
-    * *Exemple :* Prédire le prix futur d'une action, la température de demain, ou estimer le prix d'une maison en fonction de sa superficie.
+  * *Exemple :* Prédire le prix futur d'une action, la température de demain, ou estimer le prix d'une maison en fonction de sa superficie.
 
 ### 1.2 Apprentissage Non Supervisé (Unsupervised Learning)
 
 Dans l'**apprentissage non supervisé**, l'algorithme reçoit des données sans aucune étiquette explicite. Le système essaie d'apprendre la structure ou la distribution sous-jacente dans les données sans intervention humaine.
+
 * **Clustering (Regroupement) :** Regrouper des données non triées en fonction de leurs similitudes.
-    * *Exemple :* Segmentation de la clientèle (regrouper les clients par comportement d'achat sans catégories prédéfinies).
+  * *Exemple :* Segmentation de la clientèle (regrouper les clients par comportement d'achat sans catégories prédéfinies).
 * **Réduction de dimensionnalité :** Réduire le nombre de variables aléatoires prises en compte en obtenant un ensemble de variables principales. Cela compresse les données tout en maintenant leur intégrité structurelle, ce qui est très utile pour la visualisation et la réduction de la charge de calcul (par ex., ACP - Analyse en Composantes Principales).
 
 ### 1.3 Apprentissage par Renforcement (Reinforcement Learning)
 
 Dans l'**apprentissage par renforcement (RL)**, un "agent" apprend à se comporter dans un environnement en effectuant des actions et en observant les résultats. Il est basé sur un système de récompenses. L'agent reçoit un renforcement positif pour les bonnes actions et un renforcement négatif (pénalités) pour les mauvaises.
+
 * *Exemple :* Entraîner une IA à jouer aux échecs, la conduite autonome, ou la navigation robotique. L'algorithme apprend la politique optimale pour maximiser sa récompense cumulée au fil du temps.
 
 ### 1.4 Apprentissage par Transfert (Transfer Learning)
+
 L'**apprentissage par transfert** est une technique où un modèle développé pour une tâche spécifique est réutilisé comme point de départ pour un modèle sur une seconde tâche connexe. Au lieu d'entraîner un modèle de zéro (ce qui nécessite des quantités massives de données et de puissance de calcul), nous "transférons" les connaissances (poids et biais) d'un modèle pré-entraîné.
+
 * *Exemple :* Prendre un modèle massif de reconnaissance d'images entraîné par Google et affiner ses dernières couches pour reconnaître des types spécifiques de radiographies médicales.
 
 ---
@@ -43,6 +49,7 @@ L'**apprentissage par transfert** est une technique où un modèle développé p
 Nous allons maintenant zoomer sur l'apprentissage supervisé, plus précisément la **Régression**. Nous commencerons par sa forme la plus simple : la régression linéaire univariée (à une seule variable).
 
 ### 2.1 La fonction d'hypothèse (The Hypothesis Function)
+
 La régression est une technique statistique qui estime la relation entre une variable dépendante $y$ (la cible) et une variable indépendante $x$ (la caractéristique). Le but de la régression linéaire est d'ajuster une ligne droite à travers les points de données qui représente le mieux la tendance.
 
 La formulation mathématique (l'Hypothèse) est :
@@ -54,6 +61,7 @@ $$y=ax+b$$
 * $b$ : L'ordonnée à l'origine (biais ou *bias*). Elle détermine où la ligne croise l'axe vertical.
 
 ### 2.2 La fonction de coût (MSE)
+
 Pour trouver la ligne qui "s'ajuste le mieux", nous avons besoin d'un moyen de mesurer à quel point notre ligne actuelle a *tort*. Nous faisons cela en calculant l'erreur entre les prédictions de notre modèle et les vraies étiquettes réelles de notre jeu de données.
 
 La métrique la plus courante pour la régression est l'**Erreur Quadratique Moyenne (MSE - Mean Squared Error)**.
@@ -61,8 +69,9 @@ La métrique la plus courante pour la régression est l'**Erreur Quadratique Moy
 Si nous avons $m$ exemples d'entraînement, pour chaque exemple $i$, notre modèle prédit $ax^{(i)}+b$, tandis que la vraie valeur est $y^{(i)}$. L'erreur pour cette seule prédiction est $(ax^{(i)}+b-y^{(i)})$.
 
 Nous élevons cette erreur au carré pour deux raisons :
-1.  Cela garantit que toutes les erreurs sont positives (ainsi une prédiction trop élevée n'annule pas une prédiction trop basse).
-2.  Cela pénalise lourdement les grandes erreurs, forçant le modèle à se soucier davantage des valeurs aberrantes (outliers).
+
+1. Cela garantit que toutes les erreurs sont positives (ainsi une prédiction trop élevée n'annule pas une prédiction trop basse).
+2. Cela pénalise lourdement les grandes erreurs, forçant le modèle à se soucier davantage des valeurs aberrantes (outliers).
 
 La fonction de coût totale $J(a,b)$ est la moyenne de ces erreurs au carré :
 
@@ -77,24 +86,28 @@ $$J(a,b)=\frac{1}{2m}\sum_{i=1}^{m}(ax^{(i)}+b-y^{(i)})^2$$
 Nous avons notre fonction de coût $J(a,b)$. Notre objectif est de trouver les valeurs spécifiques de $a$ et $b$ qui rendent $J(a,b)$ aussi proche de $0$ que possible.
 
 ### 3.1 Intuition
+
 Imaginez que vous êtes au sommet d'une montagne brumeuse et que vous voulez atteindre le village tout au fond de la vallée. À cause du brouillard, vous ne pouvez pas voir le village. Que faites-vous ? Vous sentez la pente du sol sous vos pieds. Vous faites un pas dans la direction qui descend le plus abruptement. Vous répétez cela jusqu'à ce que le sol soit plat.
 
 C'est exactement ainsi que fonctionne la **Descente de Gradient** (Gradient Descent). La "montagne" est la fonction de coût $J(a,b)$. La "pente du sol" est la dérivée (le gradient).
 
 ### 3.2 L'Algorithme
-1.  **Initialiser** les paramètres $a$ et $b$ (souvent à 0 ou à de petits nombres aléatoires).
-2.  **Répéter** jusqu'à convergence (jusqu'à ce que le coût cesse de diminuer) :
-    * Calculer la fonction de coût $J(a,b)$.
-    * Calculer les gradients (la pente).
-    * Mettre à jour les paramètres simultanément :
-        * $$a=a-\alpha\frac{\partial J}{\partial a}$$
-        * $$b=b-\alpha\frac{\partial J}{\partial b}$$
+
+1. **Initialiser** les paramètres $a$ et $b$ (souvent à 0 ou à de petits nombres aléatoires).
+2. **Répéter** jusqu'à convergence (jusqu'à ce que le coût cesse de diminuer) :
+  * Calculer la fonction de coût $J(a,b)$.
+  * Calculer les gradients (la pente).
+  * Mettre à jour les paramètres simultanément :
+    * $$a=a-\alpha\frac{\partial J}{\partial a}$$
+    * $$b=b-\alpha\frac{\partial J}{\partial b}$$
 
 **Le taux d'apprentissage ($\alpha$ ou *Learning Rate*) :** Cet hyperparamètre contrôle la taille du "pas" que vous faites pour descendre la montagne.
+
 * Si $\alpha$ est trop petit, la descente de gradient sera incroyablement lente.
 * Si $\alpha$ est trop grand, vous risquez d'enjamber complètement la vallée et de vous retrouver plus haut de l'autre côté (divergence).
 
 ### 3.3 Dérivation des Gradients (Le calcul)
+
 Pour mettre à jour nos paramètres, nous avons besoin des dérivées partielles de notre fonction de coût par rapport à $a$ et $b$. Nous utiliserons la **règle de dérivation en chaîne** (Chain Rule), exactement comme vous l'avez noté : $(g \circ f)' = g'(f) \cdot f'$.
 
 Soit notre fonction interne l'erreur :
@@ -106,6 +119,7 @@ La dérivée de la fonction externe par rapport à son entrée est $g'(z) = 2z$.
 Par conséquent : $g'(f) = 2(ax^{(i)}+b-y^{(i)})$.
 
 Maintenant, nous avons besoin de la dérivée de la fonction interne $f$ par rapport à nos paramètres :
+
 * Par rapport à $a$ : $\frac{\partial f}{\partial a} = x^{(i)}$
 * Par rapport à $b$ : $\frac{\partial f}{\partial b} = 1$
 
@@ -121,6 +135,7 @@ $$\frac{\partial J}{\partial b} = \frac{1}{2m} \sum_{i=1}^{m} 2(ax^{(i)}+b-y^{(i
 $$\frac{\partial J}{\partial b} = \frac{1}{m} \sum_{i=1}^{m} (ax^{(i)}+b-y^{(i)})$$
 
 ### 3.4 Implémentation en Python (Univariée)
+
 Voici une implémentation robuste, de style production, de l'algorithme que vous avez décrit, en ajoutant un suivi de l'historique afin que nous puissions observer la baisse du coût au fil du temps.
 
 ```python
@@ -631,10 +646,6 @@ $$J(\theta) = \sum_{i=1}^{m} (y_i - \hat{y}_i)^2 + \lambda_1 \sum_{j=1}^{n} | \t
 
 # Chapitre : Apprentissage Supervisé - Des Moindres Distances aux Marges Maximales
 
-Ce chapitre explore deux algorithmes fondamentaux de l'apprentissage supervisé, fonctionnant sur des paradigmes très différents : l'algorithme des K-Plus Proches Voisins (K-Nearest Neighbors, KNN), basé sur la proximité géométrique locale, et les Machines à Vecteurs de Support (Support Vector Machines, SVM), basées sur l'optimisation globale de marges de séparation.
-
----
-
 ## 1. L'Algorithme des K-Plus Proches Voisins (KNN)
 
 Le KNN est un algorithme d'apprentissage supervisé non paramétrique et "paresseux" (lazy learning). Il est dit non paramétrique car il ne fait aucune hypothèse sous-jacente sur la distribution des données, et "paresseux" car il n'y a pas de phase d'apprentissage explicite ; le modèle mémorise simplement l'ensemble des données d'entraînement.
@@ -644,6 +655,7 @@ Le KNN est un algorithme d'apprentissage supervisé non paramétrique et "paress
 L'objectif est d'assigner une classe à une nouvelle observation en fonction des classes de ses voisins les plus proches dans l'espace des caractéristiques (feature space).
 
 **Algorithme :**
+
 1. Définir un hyperparamètre $K$ (le nombre de voisins) et choisir une métrique de distance.
 2. Pour un point de test $x_{test}$, calculer la distance par rapport à tous les points d'entraînement $x_i$.
 3. Identifier l'ensemble $\mathcal{N}$ des $K$ points d'entraînement ayant les distances les plus faibles par rapport à $x_{test}$.
@@ -665,12 +677,14 @@ Le choix de la distance définit la topologie de l'espace. Soient deux vecteurs 
 ### 1.3. L'Impact de l'Hyperparamètre K : Compromis Biais-Variance
 
 Le paramètre $K$ contrôle la complexité du modèle :
+
 * **$K$ très petit (ex. $K=1$) :** Le modèle a un **faible biais mais une forte variance**. La frontière de décision est extrêmement fragmentée, modélisant le bruit des données d'entraînement (surapprentissage ou *overfitting*).
 * **$K$ très grand :** Le modèle a un **fort biais mais une faible variance**. La frontière de décision est lissée. Un $K$ égal à la taille du jeu de données assignerait simplement la classe majoritaire globale à chaque point (sous-apprentissage ou *underfitting*).
 
 ### 1.4. Validation Croisée (Cross-Validation)
 
 La sélection rigoureuse de $K$ s'effectue par validation croisée à $k$ plis (K-Fold Cross-Validation) :
+
 1. Partitionner le jeu d'entraînement en $V$ sous-ensembles (plis) disjoints de taille égale.
 2. Pour chaque valeur candidate de $K$, répéter $V$ fois l'opération suivante : entraîner le modèle sur $V-1$ plis et évaluer sa performance (ex. exactitude, score F1) sur le pli restant.
 3. Calculer la performance moyenne sur les $V$ itérations. La valeur de $K$ retenue est celle qui maximise cette moyenne.
@@ -713,7 +727,9 @@ Les points situés exactement sur les plans $w \cdot x + b = 1$ et $w \cdot x + 
 Maximiser la marge $\frac{2}{||w||}$ équivaut à minimiser $\frac{1}{2} ||w||^2$.
 
 **Problème d'optimisation primal :**
+
 $$\min_{w, b} \frac{1}{2} ||w||^2$$
+
 Sous contrainte : $$y_i (w \cdot x_i + b) \geq 1 \quad \forall i \in \{1, ..., N\}$$
 
 ### 2.2. Marge Souple (Soft Margin) et Paramètre C
@@ -723,9 +739,11 @@ Dans la réalité, les données sont rarement parfaitement séparables linéaire
 La contrainte devient : $y_i (w \cdot x_i + b) \geq 1 - \xi_i$.
 
 Le nouveau problème d'optimisation devient :
+
 $$\min_{w, b, \xi} \left( \frac{1}{2} ||w||^2 + C \sum_{i=1}^{N} \xi_i \right)$$
 
 L'hyperparamètre de régularisation $C$ contrôle le compromis :
+
 * **$C$ élevé :** Pénalité forte pour les erreurs. L'algorithme préfère une marge plus étroite pour classer parfaitement le jeu d'entraînement (risque de surapprentissage).
 * **$C$ faible :** Pénalité faible. L'algorithme tolère des erreurs sur les données d'entraînement pour maximiser la marge globale (meilleure généralisation, mais risque de sous-apprentissage).
 
@@ -734,8 +752,11 @@ L'hyperparamètre de régularisation $C$ contrôle le compromis :
 Le problème d'optimisation sous contraintes est généralement résolu en passant par le Lagrangien, ce qui nous amène à la formulation duale. On associe un multiplicateur de Lagrange $\alpha_i \geq 0$ à chaque contrainte.
 
 Le problème dual consiste à maximiser :
+
 $$\max_{\alpha} \left( \sum_{i=1}^{N} \alpha_i - \frac{1}{2} \sum_{i=1}^{N} \sum_{j=1}^{N} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j) \right)$$
+
 Sous contraintes :
+
 $$\sum_{i=1}^{N} \alpha_i y_i = 0 \quad \text{et} \quad 0 \leq \alpha_i \leq C \quad \forall i$$
 
 **Insight théorique crucial :** La solution du vecteur normal $w$ est une combinaison linéaire des seuls vecteurs de support (les données pour lesquelles $\alpha_i > 0$). Le modèle ignore totalement les autres points d'entraînement. De plus, on remarque que l'espace des caractéristiques n'intervient que sous la forme d'un produit scalaire $(x_i \cdot x_j)$.
@@ -751,16 +772,16 @@ $$K(x_i, x_j) = \phi(x_i) \cdot \phi(x_j)$$
 
 #### Les Noyaux Fondamentaux (L'Arsenal des Kernels) :
 
-1.  **Noyau Linéaire :**
+1. **Noyau Linéaire :**
     $$K(x_i, x_j) = x_i \cdot x_j$$
     (Utilisé pour les textes ou données en très haute dimension).
-2.  **Noyau Polynomial :**
+2. **Noyau Polynomial :**
     $$K(x_i, x_j) = (\gamma x_i \cdot x_j + r)^d$$
     Où $d$ est le degré du polynôme.
-3.  **Noyau RBF (Fonction à Base Radiale / Gaussien) :**
+3. **Noyau RBF (Fonction à Base Radiale / Gaussien) :**
     $$K(x_i, x_j) = \exp(-\gamma ||x_i - x_j||^2)$$
     Projette les données dans un espace de dimension infinie. Le paramètre $\gamma$ (gamma) définit la portée d'influence d'un seul point d'entraînement. Un petit gamma signifie une grande variance (influence étendue), tandis qu'un grand gamma crée des îlots d'influence locaux très serrés autour des vecteurs de support.
-4.  **Noyau Sigmoïde :**
+4. **Noyau Sigmoïde :**
     $$K(x_i, x_j) = \tanh(\gamma x_i \cdot x_j + r)$$
     (Souvent utilisé comme proxy pour les réseaux de neurones, imitant une fonction d'activation).
 
