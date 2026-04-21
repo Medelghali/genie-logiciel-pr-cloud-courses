@@ -628,3 +628,141 @@ L'**Elastic Net** est une méthode hybride qui combine la puissance de Ridge et 
 $$J(\theta) = \sum_{i=1}^{m} (y_i - \hat{y}_i)^2 + \lambda_1 \sum_{j=1}^{n} | \theta_j | + \lambda_2 \sum_{j=1}^{n} \theta_j^2$$
 
 **Effet :** Cette méthode est particulièrement utile lorsque vous avez de nombreuses caractéristiques (features) corrélées entre elles. Le terme L1 ($\lambda_1$) va sélectionner un sous-ensemble de variables pertinentes (en mettant les autres à zéro), tandis que le terme L2 ($\lambda_2$) va maintenir une certaine stabilité et regrouper les variables corrélées pour éviter que le modèle n'en choisisse une au hasard.
+
+# Chapitre : Apprentissage Supervisé - Des Moindres Distances aux Marges Maximales
+
+Ce chapitre explore deux algorithmes fondamentaux de l'apprentissage supervisé, fonctionnant sur des paradigmes très différents : l'algorithme des K-Plus Proches Voisins (K-Nearest Neighbors, KNN), basé sur la proximité géométrique locale, et les Machines à Vecteurs de Support (Support Vector Machines, SVM), basées sur l'optimisation globale de marges de séparation.
+
+---
+
+## 1. L'Algorithme des K-Plus Proches Voisins (KNN)
+
+Le KNN est un algorithme d'apprentissage supervisé non paramétrique et "paresseux" (lazy learning). Il est dit non paramétrique car il ne fait aucune hypothèse sous-jacente sur la distribution des données, et "paresseux" car il n'y a pas de phase d'apprentissage explicite ; le modèle mémorise simplement l'ensemble des données d'entraînement.
+
+### 1.1. KNN pour la Classification
+
+L'objectif est d'assigner une classe à une nouvelle observation en fonction des classes de ses voisins les plus proches dans l'espace des caractéristiques (feature space).
+
+**Algorithme :**
+1. Définir un hyperparamètre $K$ (le nombre de voisins) et choisir une métrique de distance.
+2. Pour un point de test $x_{test}$, calculer la distance par rapport à tous les points d'entraînement $x_i$.
+3. Identifier l'ensemble $\mathcal{N}$ des $K$ points d'entraînement ayant les distances les plus faibles par rapport à $x_{test}$.
+4. Règle de décision : Assigner à $x_{test}$ la classe majoritaire au sein de $\mathcal{N}$. En cas d'égalité, des heuristiques de pondération par l'inverse de la distance peuvent être appliquées.
+
+### 1.2. Métriques de Distance
+
+Le choix de la distance définit la topologie de l'espace. Soient deux vecteurs $p$ et $q$ dans un espace à $n$ dimensions.
+
+* **Distance de Minkowski :** C'est la généralisation des distances métriques classiques, paramétrée par $p$.
+    $$d(p, q) = \left( \sum_{i=1}^{n} |p_i - q_i|^p \right)^{\frac{1}{p}}$$
+* **Distance de Manhattan (Norme $L_1$) :** Cas particulier de Minkowski avec $p=1$. Adaptée aux données de grande dimension ou lorsque les caractéristiques sont indépendantes.
+    $$d(p, q) = \sum_{i=1}^{n} |p_i - q_i|$$
+* **Distance Euclidienne (Norme $L_2$) :** Cas particulier avec $p=2$. C'est la distance géométrique standard.
+    $$d(p, q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+* **Distance de Chebyshev (Norme $L_\infty$) :** La limite de Minkowski quand $p \to \infty$. Elle correspond à la différence maximale sur une seule dimension.
+    $$d(p, q) = \max_{i} |p_i - q_i|$$
+
+### 1.3. L'Impact de l'Hyperparamètre K : Compromis Biais-Variance
+
+Le paramètre $K$ contrôle la complexité du modèle :
+* **$K$ très petit (ex. $K=1$) :** Le modèle a un **faible biais mais une forte variance**. La frontière de décision est extrêmement fragmentée, modélisant le bruit des données d'entraînement (surapprentissage ou *overfitting*).
+* **$K$ très grand :** Le modèle a un **fort biais mais une faible variance**. La frontière de décision est lissée. Un $K$ égal à la taille du jeu de données assignerait simplement la classe majoritaire globale à chaque point (sous-apprentissage ou *underfitting*).
+
+### 1.4. Validation Croisée (Cross-Validation)
+
+La sélection rigoureuse de $K$ s'effectue par validation croisée à $k$ plis (K-Fold Cross-Validation) :
+1. Partitionner le jeu d'entraînement en $V$ sous-ensembles (plis) disjoints de taille égale.
+2. Pour chaque valeur candidate de $K$, répéter $V$ fois l'opération suivante : entraîner le modèle sur $V-1$ plis et évaluer sa performance (ex. exactitude, score F1) sur le pli restant.
+3. Calculer la performance moyenne sur les $V$ itérations. La valeur de $K$ retenue est celle qui maximise cette moyenne.
+
+### 1.5. KNN pour la Régression
+
+Dans un contexte de régression (prédiction d'une valeur continue), la règle de vote majoritaire est remplacée par l'espérance locale. La valeur prédite $\hat{y}$ pour un point de test est la moyenne des valeurs cibles $y_i$ de ses $K$ plus proches voisins :
+
+$$\hat{y} = \frac{1}{K} \sum_{i=1}^{K} y_i$$
+
+*(Note : Une variante pondérée utilise $\hat{y} = \frac{\sum w_i y_i}{\sum w_i}$ où le poids $w_i = \frac{1}{d(x, x_i)}$, donnant plus d'importance aux voisins les plus proches).*
+
+### 1.6. Évaluation Algorithmique
+
+* **Avantages :** Transparence conceptuelle, aucune phase d'optimisation coûteuse à l'entraînement, capacité à générer des frontières de décision hautement non-linéaires.
+* **Inconvénients :** Complexité temporelle d'inférence en $\mathcal{O}(nd)$ (où $n$ est le nombre d'échantillons et $d$ la dimension), bien que des structures d'arbres (KD-Tree, Ball-Tree) puissent réduire cela. Sensibilité extrême aux variables non pertinentes.
+* **Le Fléau de la Dimension (Curse of Dimensionality) :** À mesure que le nombre de dimensions $d$ augmente, le volume de l'espace croît exponentiellement. Par conséquent, la distance entre les points devient homogène, rendant le concept de "plus proche voisin" insignifiant.
+
+---
+
+## 2. Les Machines à Vecteurs de Support (SVM)
+
+Contrairement au KNN qui effectue des inférences locales, les SVM visent à trouver une structure séparatrice globale. L'objectif fondamental d'un SVM est de trouver un hyperplan qui sépare les classes avec la marge géométrique maximale, offrant ainsi la meilleure garantie de généralisation selon la théorie d'apprentissage statistique de Vapnik-Chervonenkis.
+
+### 2.1. Formulation Mathématique : Marge Dure (Hard Margin)
+
+Considérons un ensemble de données linéairement séparable $(x_1, y_1), ..., (x_N, y_N)$ où $x_i \in \mathbb{R}^d$ et les étiquettes de classe $y_i \in \{-1, 1\}$.
+
+L'équation d'un hyperplan séparateur est donnée par :
+$$w \cdot x + b = 0$$
+Où $w$ est le vecteur normal à l'hyperplan (déterminant l'orientation) et $b$ est le biais (déterminant la translation par rapport à l'origine).
+
+Nous imposons que les points soient correctement classés avec une "marge de sécurité", ce qui se traduit par les contraintes :
+$$w \cdot x_i + b \geq 1 \quad \text{si } y_i = 1$$
+$$w \cdot x_i + b \leq -1 \quad \text{si } y_i = -1$$
+Ce qui peut être combiné de manière élégante :
+$$y_i (w \cdot x_i + b) \geq 1 \quad \forall i$$
+
+Les points situés exactement sur les plans $w \cdot x + b = 1$ et $w \cdot x + b = -1$ sont appelés **vecteurs de support**. La distance géométrique entre ces deux plans (la marge) est $\frac{2}{||w||}$.
+Maximiser la marge $\frac{2}{||w||}$ équivaut à minimiser $\frac{1}{2} ||w||^2$.
+
+**Problème d'optimisation primal :**
+$$\min_{w, b} \frac{1}{2} ||w||^2$$
+Sous contrainte : $$y_i (w \cdot x_i + b) \geq 1 \quad \forall i \in \{1, ..., N\}$$
+
+### 2.2. Marge Souple (Soft Margin) et Paramètre C
+
+Dans la réalité, les données sont rarement parfaitement séparables linéairement à cause du bruit ou des valeurs aberrantes (outliers). L'introduction de variables de relâchement (slack variables) $\xi_i \geq 0$ permet de violer certaines contraintes moyennant une pénalité.
+
+La contrainte devient : $y_i (w \cdot x_i + b) \geq 1 - \xi_i$.
+
+Le nouveau problème d'optimisation devient :
+$$\min_{w, b, \xi} \left( \frac{1}{2} ||w||^2 + C \sum_{i=1}^{N} \xi_i \right)$$
+
+L'hyperparamètre de régularisation $C$ contrôle le compromis :
+* **$C$ élevé :** Pénalité forte pour les erreurs. L'algorithme préfère une marge plus étroite pour classer parfaitement le jeu d'entraînement (risque de surapprentissage).
+* **$C$ faible :** Pénalité faible. L'algorithme tolère des erreurs sur les données d'entraînement pour maximiser la marge globale (meilleure généralisation, mais risque de sous-apprentissage).
+
+### 2.3. Forme Duale et Multiplicateurs de Lagrange
+
+Le problème d'optimisation sous contraintes est généralement résolu en passant par le Lagrangien, ce qui nous amène à la formulation duale. On associe un multiplicateur de Lagrange $\alpha_i \geq 0$ à chaque contrainte.
+
+Le problème dual consiste à maximiser :
+$$\max_{\alpha} \left( \sum_{i=1}^{N} \alpha_i - \frac{1}{2} \sum_{i=1}^{N} \sum_{j=1}^{N} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j) \right)$$
+Sous contraintes :
+$$\sum_{i=1}^{N} \alpha_i y_i = 0 \quad \text{et} \quad 0 \leq \alpha_i \leq C \quad \forall i$$
+
+**Insight théorique crucial :** La solution du vecteur normal $w$ est une combinaison linéaire des seuls vecteurs de support (les données pour lesquelles $\alpha_i > 0$). Le modèle ignore totalement les autres points d'entraînement. De plus, on remarque que l'espace des caractéristiques n'intervient que sous la forme d'un produit scalaire $(x_i \cdot x_j)$.
+
+### 2.4. L'Astuce du Noyau (The Kernel Trick) et Projection Dimensionnelle
+
+Si les données ne sont pas linéairement séparables, l'idée est de les projeter dans un espace de caractéristiques de plus grande dimension (parfois infinie) à l'aide d'une fonction $\phi(x)$, où elles pourraient devenir séparables par un hyperplan.
+
+Le calcul explicite des coordonnées dans ce nouvel espace, $\phi(x_i) \cdot \phi(x_j)$, serait informatiquement prohibitif. L'astuce du noyau repose sur le fait qu'il existe une fonction $K$ (le noyau) qui permet de calculer directement ce produit scalaire dans l'espace d'origine, sans jamais instancier l'espace de grande dimension :
+$$K(x_i, x_j) = \phi(x_i) \cdot \phi(x_j)$$
+
+*(C'est ce que tu avais noté par "destoration dimonsionnel", qui fait référence au plongeon ou à la projection de l'espace non-linéaire vers un espace linéaire de plus haute dimension).*
+
+#### Les Noyaux Fondamentaux (L'Arsenal des Kernels) :
+
+1.  **Noyau Linéaire :**
+    $$K(x_i, x_j) = x_i \cdot x_j$$
+    (Utilisé pour les textes ou données en très haute dimension).
+2.  **Noyau Polynomial :**
+    $$K(x_i, x_j) = (\gamma x_i \cdot x_j + r)^d$$
+    Où $d$ est le degré du polynôme.
+3.  **Noyau RBF (Fonction à Base Radiale / Gaussien) :**
+    $$K(x_i, x_j) = \exp(-\gamma ||x_i - x_j||^2)$$
+    Projette les données dans un espace de dimension infinie. Le paramètre $\gamma$ (gamma) définit la portée d'influence d'un seul point d'entraînement. Un petit gamma signifie une grande variance (influence étendue), tandis qu'un grand gamma crée des îlots d'influence locaux très serrés autour des vecteurs de support.
+4.  **Noyau Sigmoïde :**
+    $$K(x_i, x_j) = \tanh(\gamma x_i \cdot x_j + r)$$
+    (Souvent utilisé comme proxy pour les réseaux de neurones, imitant une fonction d'activation).
+
+---
+Pour t'aider à visualiser la façon dont ces équations se traduisent concrètement dans l'espace, voici un outil interactif. Tu peux y tester l'impact direct du paramètre $K$ pour l'algorithme des plus proches voisins, ou basculer sur SVM pour observer comment le choix du noyau modifie la "forme" de la frontière de décision, et comment les vecteurs de support soutiennent les marges :
