@@ -785,5 +785,243 @@ $$K(x_i, x_j) = \phi(x_i) \cdot \phi(x_j)$$
     $$K(x_i, x_j) = \tanh(\gamma x_i \cdot x_j + r)$$
     (Souvent utilisé comme proxy pour les réseaux de neurones, imitant une fonction d'activation).
 
+## 3. Théorie Fondamentale des Arbres de Décision (Decision Trees)
+
+Les arbres de décision sont une classe d'algorithmes d'apprentissage supervisé non paramétriques. "Non paramétrique" signifie que l'algorithme ne fait pas d'hypothèses fortes sur la distribution sous-jacente des données ni sur la forme de la relation (contrairement à la régression linéaire qui suppose une relation linéaire).
+
+### 3.1 Architecture et Terminologie Détaillée
+Un arbre de décision modélise une séquence de règles sous la forme d'un graphe acyclique dirigé (DAG) en forme d'arbre :
+-   **Nœud racine (Root node)** : Le nœud au sommet de l'arbre. Il représente l'ensemble complet du jeu de données (échantillon d'apprentissage). Il subit la toute première division basée sur la caractéristique la plus discriminante.
+-   **Nœuds internes (Internal ou Decision nodes)** : Représentent un test booléen ou une condition sur une caractéristique spécifique (ex: "Le salaire est-il supérieur à 50 000 € ?").
+-   **Branches (Branches/Edges)** : Représentent le résultat du test d'un nœud. Chaque nœud interne a au moins deux branches pointant vers des nœuds enfants.
+-   **Feuilles (Leaf nodes ou Terminal nodes)** : Les nœuds qui n'ont pas d'enfants. Ils représentent la décision finale du modèle. Dans un arbre de classification, c'est une étiquette de classe (basée sur le vote majoritaire des échantillons atteignant cette feuille). Dans un arbre de régression, c'est une valeur continue (généralement la moyenne des cibles des échantillons de la feuille).
+
+### 3.2 Principe Mathématique du Partitionnement
+L'entraînement d'un arbre de décision est équivalent à diviser l'espace des caractéristiques $N$-dimensionnel en hyper-rectangles mutuellement exclusifs.
+Mathématiquement, l'arbre cherche à trouver des sous-régions $R_1, R_2, ..., R_J$ qui minimisent l'erreur de prédiction globale. La prédiction dans chaque région $R_j$ est une constante $c_j$.
+Le problème global de trouver la partition optimale est NP-complet. Par conséquent, les algorithmes de construction d'arbres utilisent une approche heuristique **gloutonne descendante** (top-down greedy approach). À chaque étape, l'algorithme cherche la meilleure séparation *locale* sans regarder en avant pour voir si cette séparation conduira à un arbre global optimal.
+
+### 3.3 Avantages et Inconvénients Critiques
+**Avantages :**
+1.  **Interprétabilité et Transparence (Boîte Blanche)** : Un arbre peut être lu de haut en bas comme un ensemble de règles "Si-Alors". C'est crucial pour des domaines comme la médecine ou la finance où la justification d'une décision est requise.
+2.  **Prétraitement minimal** : Les arbres de décision ne nécessitent ni normalisation (MinMax) ni standardisation (Z-score) des caractéristiques, car la division dépend uniquement de l'ordre des valeurs (les coupures sont basées sur le tri des attributs), et non de la distance spatiale entre les points.
+3.  **Gestion de la non-linéarité** : Ils capturent facilement des relations complexes et non linéaires entre les caractéristiques et la cible.
+
+**Inconvénients :**
+1.  **Instabilité (Forte Variance)** : Une modification infime des données d'entraînement peut conduire à la sélection d'une caractéristique racine différente, ce qui modifie l'intégralité de la structure de l'arbre subséquent.
+2.  **Tendance naturelle au Surapprentissage (Overfitting)** : Sans contraintes (élagage ou hyperparamètres), un arbre de décision se développera jusqu'à ce que chaque feuille contienne exactement un point de données, mémorisant parfaitement le bruit de l'ensemble d'entraînement mais échouant lamentablement sur de nouvelles données.
+3.  **Limites sur les données déséquilibrées** : Si une classe domine largement, l'arbre aura tendance à se focaliser sur cette classe. Un re-balancement des poids des classes est souvent nécessaire au préalable.
+
 ---
-Pour t'aider à visualiser la façon dont ces équations se traduisent concrètement dans l'espace, voici un outil interactif. Tu peux y tester l'impact direct du paramètre $K$ pour l'algorithme des plus proches voisins, ou basculer sur SVM pour observer comment le choix du noyau modifie la "forme" de la frontière de décision, et comment les vecteurs de support soutiennent les marges :
+
+## 4. Algorithmes Détaillés et Mathématiques de Construction
+
+Le cœur de la construction d'un arbre est la fonction utilisée pour évaluer la qualité d'une séparation (split).
+
+### 4.1 L'algorithme ID3 (Iterative Dichotomiser 3)
+Créé par Ross Quinlan, ID3 est le précurseur. Il ne fonctionne historiquement qu'avec des variables **catégorielles**. L'objectif d'ID3 est de créer les nœuds les plus "purs" possibles, guidés par le concept mathématique d'**Entropie**.
+
+#### 4.1.1 Entropie de Shannon (Shannon Entropy)
+En théorie de l'information, l'entropie mesure le niveau de "surprise", d'incertitude ou d'impureté d'une variable aléatoire.
+Pour un jeu de données $S$ avec une variable cible discrète possédant $C$ classes possibles, l'entropie est :
+
+$$ H(S) = - \sum_{i=1}^{C} p_i \log_2(p_i) $$
+
+**Explications mathématiques :**
+-   $p_i = \frac{|S_i|}{|S|}$ est la proportion d'éléments appartenant à la classe $i$ dans l'ensemble $S$.
+-   **Pourquoi un logarithme ?** L'information d'un événement est inversement proportionnelle à sa probabilité. L'information contenue dans un événement de probabilité $p$ est $I(p) = \log(1/p) = -\log(p)$. L'entropie est l'espérance mathématique de cette information.
+-   **Borne inférieure** : Si un sous-ensemble est pur (100% classe A, 0% classe B), $p_A = 1$ et $p_B = 0$. Alors $H(S) = - (1 \cdot \log_2(1) + 0 \cdot \log_2(0)) = 0$ bits. L'incertitude est nulle. (Note : Par convention, $0 \log_2(0) = 0$ via la limite).
+-   **Borne supérieure** : Pour une classification binaire, l'entropie est maximale lorsque le désordre est total, soit $p_A = 0.5$ et $p_B = 0.5$. $H(S) = - (0.5 \log_2(0.5) + 0.5 \log_2(0.5)) = 1$ bit.
+
+#### 4.1.2 Gain d'Information (Information Gain)
+Pour décider quelle caractéristique $A$ utiliser pour diviser le nœud actuel $S$, on mesure la réduction de l'entropie que cette division engendrerait. C'est le Gain d'Information :
+
+$$ IG(S, A) = \text{Entropie Initiale} - \text{Entropie Moyenne des Enfants} $$
+$$ IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v) $$
+
+-   $\frac{|S_v|}{|S|}$ est le coefficient de pondération. Si une division crée un enfant pur mais minuscule et un autre enfant impur énorme, le gain d'information global tiendra compte de la taille des enfants pour ne pas surestimer la qualité de la séparation.
+-   L'algorithme calcule $IG(S, A)$ pour **tous** les attributs disponibles et choisit l'attribut $A^*$ tel que $A^* = \text{argmax}_{A} IG(S, A)$.
+
+### 4.2 L'algorithme C4.5 : Surmonter les Limites d'ID3
+L'algorithme C4.5 améliore ID3 sur trois points critiques : le biais des attributs multiples, les valeurs continues, et les valeurs manquantes.
+
+#### 4.2.1 Correction du Biais : Le Ratio de Gain (Gain Ratio)
+**Problème fondamental d'ID3 :** Le Gain d'Information favorise naturellement les caractéristiques qui ont un grand nombre de valeurs distinctes. Prenons une base de données patient avec un attribut "Numéro de Sécurité Sociale" (SSN). Cet attribut a une valeur unique par patient. Si l'arbre utilise SSN pour diviser, chaque nœud enfant aura exactement un patient. L'entropie de chaque enfant sera $0$, et le Gain d'Information sera maximisé. Pourtant, un tel arbre ne sert à rien pour prédire l'état de santé de nouveaux patients.
+
+**La solution C4.5 :** Normaliser le gain en fonction de la dispersion intrinsèque de l'attribut, appelée "Information de séparation" (Intrinsic Information).
+
+$$ SplitInfo(S, A) = - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} \log_2 \left( \frac{|S_v|}{|S|} \right) $$
+
+Cette métrique évalue l'entropie de la caractéristique elle-même (indépendamment de la variable cible). Si un attribut génère de très nombreuses petites branches, son $SplitInfo$ sera énorme.
+Le Ratio de Gain pénalise ainsi les attributs trop granulaires :
+
+$$ GainRatio(S, A) = \frac{IG(S, A)}{SplitInfo(S, A)} $$
+
+#### 4.2.2 Gestion des Attributs Continus
+Comment C4.5 gère-t-il une variable comme "Salaire" ?
+1.  Il ordonne toutes les valeurs uniques du salaire par ordre croissant : $\{v_1, v_2, ..., v_n\}$.
+2.  Il génère des seuils de division (points médians) : $s_k = \frac{v_k + v_{k+1}}{2}$ pour $k = 1$ à $n-1$.
+3.  Pour chaque seuil $s_k$, il transforme virtuellement la variable en variable binaire booléenne ("Salaire $\le s_k$" et "Salaire $> s_k$").
+4.  Il calcule le Ratio de Gain pour chacun de ces $(n-1)$ points de coupure.
+5.  Il retient le seuil continu offrant le Ratio de Gain maximal comme le représentant de cet attribut.
+
+#### 4.2.3 Gestion des Valeurs Manquantes
+Si une valeur manque pour un attribut $A$ sur une donnée $x_i$, C4.5 n'écarte pas $x_i$. Lors du calcul du gain, il pondère les fréquences. Lors de la division réelle, $x_i$ est fragmenté temporellement et distribué "fractionnellement" dans toutes les branches enfants de $A$, proportionnellement au nombre de données valides de chaque branche. Les prédictions finales pour cet élément seront probabilistes.
+
+### 4.3 L'algorithme CART (Classification and Regression Trees)
+Développé par Breiman et al. en 1984, CART est l'algorithme standard utilisé dans la bibliothèque Scikit-Learn de Python. Il se distingue par deux aspects fondamentaux :
+1.  **Arbres strictement binaires** : Chaque nœud, quelle que soit la caractéristique, est toujours divisé en exactement deux enfants (Oui/Non).
+2.  **Support natif de la régression et de la classification**.
+
+#### 4.3.1 Pour la Classification : L'Impureté de Gini (Gini Impurity)
+L'indice de Gini est une alternative à l'entropie. Il est calculatoirement plus efficace car il ne nécessite pas de calculer des logarithmes (une opération coûteuse pour le processeur).
+Il mesure la probabilité de mal classer un échantillon tiré au hasard si on lui attribuait aléatoirement une classe selon la distribution de probabilité du nœud.
+
+$$ Gini(S) = 1 - \sum_{i=1}^{C} (p_i)^2 $$
+
+-   Un nœud parfaitement pur a un Gini de $0$ ($1 - 1^2 = 0$).
+-   La valeur maximale (pour 2 classes équilibrées) est $1 - (0.5^2 + 0.5^2) = 1 - 0.5 = 0.5$.
+L'algorithme CART cherche la séparation qui minimise l'impureté de Gini pondérée des deux nœuds enfants :
+$$ Gini_{split} = \frac{|S_{gauche}|}{|S|} Gini(S_{gauche}) + \frac{|S_{droite}|}{|S|} Gini(S_{droite}) $$
+
+*Note de performance : Gini et Entropie donnent généralement des résultats presque identiques quant à la structure finale de l'arbre, mais Gini s'exécute légèrement plus vite. L'Entropie a tendance à produire des arbres légèrement plus équilibrés.*
+
+#### 4.3.2 Pour la Régression : MSE et MAE
+Si le problème est la prédiction d'une valeur continue, on ne cherche plus l'homogénéité des classes, mais à minimiser la dispersion (la variance) des valeurs cibles $y_i$ au sein d'un nœud.
+Le critère de base est la minimisation de l'Erreur Quadratique Moyenne (Mean Squared Error - MSE) ou de l'Erreur Absolue Moyenne (Mean Absolute Error - MAE).
+
+La valeur prédite $\hat{y}$ pour un nœud donné $S$ est la valeur moyenne (pour MSE) ou médiane (pour MAE) des éléments qu'il contient :
+$$ \hat{y}_S = \frac{1}{|S|} \sum_{i \in S} y_i $$
+
+L'erreur du nœud est mesurée par la variance :
+$$ Variance(S) = \frac{1}{|S|} \sum_{i \in S} (y_i - \hat{y}_S)^2 $$
+
+CART cherche la séparation (caractéristique $j$ et seuil $s$) qui minimise la variance des nœuds enfants :
+$$ Cost(j, s) = \frac{|S_{gauche}|}{|S|} Variance(S_{gauche}) + \frac{|S_{droite}|}{|S|} Variance(S_{droite}) $$
+
+---
+
+## 5. Hyperparamètres et Lutte contre le Surapprentissage (Regularization)
+
+Un arbre de décision libre croîtra indéfiniment. Pour éviter le surapprentissage (overfitting), il faut contrôler l'algorithme grâce aux hyperparamètres.
+
+1.  **`max_depth` (Profondeur maximale)** : Restreint la profondeur de l'arbre (le nombre de niveaux). Un arbre trop profond mémorise les données (variance élevée), un arbre trop peu profond ne capte pas les relations (biais élevé).
+2.  **`min_samples_split` (Minimum d'échantillons pour diviser)** : Le nombre minimum d'observations requises dans un nœud interne avant d'autoriser l'algorithme à chercher une nouvelle division. Si défini à 10, un nœud avec 9 échantillons deviendra automatiquement une feuille.
+3.  **`min_samples_leaf` (Minimum d'échantillons par feuille)** : Impose qu'une division est valide *uniquement si* les nœuds enfants générés ont chacun au moins ce nombre d'échantillons. Cela lisse le modèle et l'empêche de créer des règles spécifiques pour isoler 1 ou 2 "outliers" (valeurs aberrantes).
+4.  **`max_features` (Caractéristiques maximales considérées)** : Au lieu d'évaluer toutes les caractéristiques à chaque nœud pour trouver la meilleure séparation, l'algorithme tire un sous-ensemble aléatoire de caractéristiques. (Hyperparamètre fondamental pour les Random Forests).
+5.  **Élagage (Pruning)** : L'élagage *a posteriori* (Cost Complexity Pruning) consiste à faire croître l'arbre au maximum, puis à couper (remplacer par une feuille) les branches qui n'apportent qu'une amélioration marginale (inférieure à un paramètre de pénalité de complexité $\alpha$), mesurée sur un jeu de validation.
+
+---
+
+## 6. Exemple Pratique Détaillé : Résolution Mathématique ("Play Tennis")
+
+Réalisons les calculs d'une itération de construction (Root node) pour le dataset Tennis.
+
+**Données Globales $S$ :** $N = 14$ jours au total.
+**Variable Cible $Y$ (JOUER) :** 9 jours "Oui" ($c_1$), 5 jours "Non" ($c_2$).
+
+### Étape A : Entropie du système global
+L'incertitude initiale :
+$$ H(S) = - \left( \frac{9}{14} \log_2 \frac{9}{14} + \frac{5}{14} \log_2 \frac{5}{14} \right) \approx - (0.643 \times -0.637 + 0.357 \times -1.485) $$
+$$ H(S) \approx 0.410 + 0.530 \approx \mathbf{0.940} \text{ bits} $$
+
+### Étape B : Évaluation de la caractéristique "TEMPS" (Météo)
+La caractéristique a 3 catégories : Ensoleillé, Couvert, Pluie.
+Nous divisons $S$ en trois sous-ensembles $S_{Ensol}$, $S_{Couv}$, $S_{Pluie}$ et calculons l'entropie de chacun :
+
+**1. Météo = Ensoleillé ($S_{Ensol}$)**
+- Total = 5 jours. Cibles : 2 Oui, 3 Non.
+- $$ H(S_{Ensol}) = - \left( \frac{2}{5} \log_2 \frac{2}{5} + \frac{3}{5} \log_2 \frac{3}{5} \right) \approx 0.971 $$
+
+**2. Météo = Couvert ($S_{Couv}$)**
+- Total = 4 jours. Cibles : 4 Oui, 0 Non.
+- $$ H(S_{Couv}) = - \left( \frac{4}{4} \log_2 1 + \frac{0}{4} \log_2 0 \right) = \mathbf{0} $$
+*(Ce sous-ensemble est pur. Si la météo est couverte, on joue à 100%. L'arbre ne divisera pas ce nœud davantage, c'est une feuille finale).*
+
+**3. Météo = Pluie ($S_{Pluie}$)**
+- Total = 5 jours. Cibles : 3 Oui, 2 Non.
+- $$ H(S_{Pluie}) = - \left( \frac{3}{5} \log_2 \frac{3}{5} + \frac{2}{5} \log_2 \frac{2}{5} \right) \approx 0.971 $$
+
+### Étape C : Calcul de l'Information Gain pour "TEMPS"
+On calcule la somme pondérée des entropies des nœuds enfants :
+$$ H_{TEMPS}(S) = \frac{|S_{Ensol}|}{|S|} H(S_{Ensol}) + \frac{|S_{Couv}|}{|S|} H(S_{Couv}) + \frac{|S_{Pluie}|}{|S|} H(S_{Pluie}) $$
+$$ H_{TEMPS}(S) = \frac{5}{14}(0.971) + \frac{4}{14}(0) + \frac{5}{14}(0.971) \approx 0.347 + 0 + 0.347 \approx \mathbf{0.694} $$
+
+La réduction d'incertitude finale (Gain d'information) est :
+$$ IG(S, TEMPS) = H(S) - H_{TEMPS}(S) = 0.940 - 0.694 = \mathbf{0.246} $$
+
+*L'algorithme répéterait ce processus exact pour les variables "TEMPERATURE", "HUMIDITE" et "VENT". La variable avec le IG maximum sera choisie pour devenir le nœud racine de l'arbre.*
+
+---
+
+## 7. Algorithme des Forêts Aléatoires (Random Forest)
+
+Les Forêts Aléatoires (Random Forests) constituent un algorithme d'apprentissage supervisé extrêmement puissant et polyvalent, utilisable tant pour la classification que pour la régression. Bien qu'il s'agisse techniquement d'une méthode d'ensemble, son importance fondamentale justifie de l'étudier en détail.
+
+### 7.1 Concept Fondamental
+L'idée centrale de la forêt aléatoire est la "sagesse de la foule". L'algorithme crée une vaste "forêt" constituée de nombreux arbres de décision individuels. Chacun de ces arbres divise l'espace des caractéristiques en sous-espaces organisés hiérarchiquement (via des séparations récursives).
+La prédiction finale de la forêt est obtenue en agrégeant les prédictions de tous ces arbres de base :
+- **Classification** : Vote majoritaire (Hard Voting : la classe choisie par le plus grand nombre d'arbres).
+- **Régression** : Moyenne arithmétique des prédictions de tous les arbres.
+
+### 7.2 Fonctionnement et Mécanismes Clés
+Le fonctionnement d'une Forêt Aléatoire repose sur deux mécanismes de randomisation critiques conçus pour s'assurer que les arbres sont **dé-corrélés** (statistiquement indépendants), ce qui maximise l'efficacité de la moyenne globale :
+
+1.  **L'utilisation du Bagging (Bootstrap Aggregating)** : Chaque arbre de décision de la forêt est entraîné sur un *échantillon bootstrap* différent. Il s'agit d'un sous-échantillon généré par tirage aléatoire **avec remise** à partir du jeu de données original.
+2.  **La Sélection Aléatoire des Caractéristiques (Random Subspace / Feature Bagging)** : C'est ce qui différencie la Forêt Aléatoire du simple Bagging d'arbres. Lors de la construction de chaque arbre, chaque fois qu'un nœud doit être divisé, l'algorithme n'évalue pas *toutes* les caractéristiques disponibles pour trouver la meilleure coupure. Au lieu de cela, il sélectionne aléatoirement un petit sous-ensemble de caractéristiques (généralement $m = \sqrt{p}$ variables en classification, où $p$ est le total) et cherche la meilleure division uniquement parmi celles-ci.
+
+### 7.3 Avantages et Inconvénients
+
+**Avantages :**
+- **Excellente précision et robustesse** : La combinaison de multiples arbres dé-corrélés réduit drastiquement la variance et empêche le surapprentissage, même sur des données très bruitées.
+- **Gestion des non-linéarités** : Capable de modéliser des interactions complexes sans aucune transformation préalable des données.
+- **Feature Importance** : Fournit une mesure naturelle de l'importance de chaque variable (calculée en observant la diminution moyenne de l'impureté de Gini induite par chaque variable dans tous les arbres).
+- **Validation interne (Out-Of-Bag Error)** : Les données non tirées lors du Bootstrap (environ 36.8%) peuvent être utilisées pour tester l'arbre immédiatement, fournissant une estimation gratuite de l'erreur de généralisation.
+
+**Inconvénients :**
+- **Perte d'interprétabilité (Boîte noire)** : Contrairement à un arbre de décision unique qu'on peut lire de haut en bas, la forêt est complexe et ses décisions internes ne peuvent plus être représentées sous la forme d'une simple règle logique compréhensible.
+- **Complexité spatiale et temporelle** : Entraîner et stocker 500 ou 1000 arbres profonds consomme beaucoup de mémoire et de temps de calcul par rapport à un modèle simple, bien que l'algorithme soit hautement parallélisable.
+
+---
+
+## 8. Les Autres Méthodes d'Ensemble (Ensemble Methods)
+
+Les méthodes d'ensemble visent à combiner les prédictions d'une "foule" de modèles pour obtenir une performance globale supérieure. Elles agissent sur le célèbre **Compromis Biais-Variance**.
+- **Erreur totale** = $Biais^2 + Variance + Bruit Irréductible$.
+
+### 8.1 Le Bagging Général (Bootstrap Aggregating)
+Comme vu avec les Forêts Aléatoires, le Bagging est conçu pour **réduire la variance**.
+- L'erreur OOB (Out-Of-Bag) est utilisée pour estimer la performance du modèle final en demandant à chaque modèle de base de prédire uniquement sur ses échantillons non vus, puis on agrège.
+- L'agrégation se fait par moyenne (régression) ou par vote majoritaire (classification).
+
+### 8.2 Boosting (Amplification Séquentielle)
+Contrairement au Bagging (parallèle et focalisé sur la variance), le Boosting est séquentiel et focalisé sur la **réduction du biais**. L'idée est de combiner de très "mauvais" modèles (ex: un arbre de profondeur 1) pour former un expert, en apprenant itérativement des erreurs précédentes.
+
+#### 8.2.1 AdaBoost (Adaptive Boosting)
+Dans AdaBoost, l'algorithme maintient un système de **poids ($w_i$)** pour chaque observation.
+1. Le modèle faible $H_1$ est entraîné. On identifie les échantillons mal classés.
+2. Les poids $w$ des échantillons mal classés sont **augmentés**, tandis que ceux bien classés sont réduits.
+3. Le modèle suivant $H_2$ est forcé de se concentrer lourdement sur ces exemples "difficiles".
+4. L'algorithme assigne à chaque modèle un "poids d'influence" $\alpha_m$, inversement proportionnel à son taux d'erreur $\epsilon_m$ :
+   $$ \alpha_m = \frac{1}{2} \ln \left( \frac{1 - \epsilon_m}{\epsilon_m} \right) $$
+
+#### 8.2.2 Gradient Boosting Machines (GBM)
+Au lieu d'ajuster les poids des échantillons, le Gradient Boosting effectue une optimisation numérique de descente de gradient dans l'espace des fonctions.
+- Le nouveau modèle (le nouvel arbre) $h_m$ **n'est pas entraîné pour prédire la cible $y_i$, mais pour prédire le résidu $r_{im}$** (l'erreur du modèle précédent).
+- Ces résidus sont le gradient négatif de la fonction de coût $L$ :
+  $$ r_{im} = - \left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x) = F_{m-1}(x)} $$
+
+#### 8.2.3 XGBoost (Extreme Gradient Boosting)
+C'est la version ultra-performante de GBM.
+- **Approximation Mathématique Avancée** : Utilise une approximation de Taylor du second ordre (incluant la dérivée seconde / la Hessienne).
+- **Régularisation native** : Inclut un terme explicite de régularisation mathématique $\Omega(f)$ qui pénalise la complexité de l'arbre.
+
+### 8.3 Stacking (Stacked Generalization)
+Le Stacking est une méthode d'assemblage hétérogène avancée qui utilise la puissance combinée d'algorithmes fondamentalement différents (ex: combiner un Arbre, une Régression Logistique, et un K-NN).
+1.  **Niveau 0 (Base Level)** : Un groupe d'algorithmes diversifiés est entraîné via Validation Croisée K-Fold. Les prédictions "out-of-fold" sont rassemblées.
+2.  **Niveau 1 (Meta-Level / Blender)** : Les prédictions des modèles du Niveau 0 deviennent les **nouvelles variables d'entrée (features)** pour un "méta-modèle" (ex: régression Ridge) qui apprend la meilleure façon de combiner ces prédictions.
+
+### 8.4 Voting (Vote simple)
+C'est l'étape de combinaison pure (sans apprentissage au Niveau 1).
+-   **Hard Voting (Vote majoritaire strict)** : La prédiction de l'ensemble est le mode statistique (la classe la plus votée).
+-   **Soft Voting (Vote pondéré par les probabilités)** : Les probabilités prédites par chaque modèle sont moyennées. La classe ayant l'espérance la plus forte l'emporte. Souvent supérieur au Hard Voting.
