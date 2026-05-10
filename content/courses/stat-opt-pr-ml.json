@@ -2,5 +2,6 @@
     "type": "Course",
     "reference": "statistics-optimization-for-ml",
     "title": "Statistics Optimization for Machine Learning",
-    "introMarkdownRef": "statistics-optimization-for-ml-intro"
+    "introMarkdownRef": "statistics-optimization-for-ml-intro",
+    "author": "M-E"
 }

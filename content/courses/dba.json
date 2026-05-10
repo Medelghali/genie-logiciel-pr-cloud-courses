@@ -2,5 +2,6 @@
     "type": "Course",
     "reference": "dba",
     "title": "Database Administration",
-    "introMarkdownRef": "dba-intro"
+    "introMarkdownRef": "dba-intro",
+    "author": "M-E"
 }

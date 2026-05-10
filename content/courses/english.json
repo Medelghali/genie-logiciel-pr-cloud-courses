@@ -2,5 +2,6 @@
     "type": "Course",
     "reference": "english",
     "title": "English for Computer Science",
-    "introMarkdownRef": "english-intro"
+    "introMarkdownRef": "english-intro",
+    "author": "M-E"
 }
